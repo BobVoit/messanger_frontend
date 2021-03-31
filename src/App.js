@@ -24,6 +24,8 @@ import Friends from './Components/Friends/Friends';
 import Users from './Components/Users/Users';
 import Dialogs from './Components/Dialogs/Dialogs';
 
+import Socket from './modules/Socket';
+
 const useStyles = theme => ({
   root: {
     marginTop: theme.spacing(10),
@@ -35,19 +37,28 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      openDrawer: false
+      drawerOpen: false
     }
     this.drawerWidth = 300;
+    this.state = {
+      // socket: null
+    }
+  }
+
+  componentDidMount() {
+    // this.setState({
+    //   socket: new Socket()
+    // })
   }
   
   static contextType = WebSocketContext;
 
   handleDrawerOpen = () => {
-    this.setState({ openDrawer: true });
+    this.setState({ drawerOpen: true });
   };
 
   handleDrawerClose = () => {
-    this.setState({ openDrawer: false });
+    this.setState({ drawerOpen: false });
   };
 
 
@@ -61,12 +72,13 @@ class App extends Component {
           <div>
             <Header 
               handleDrawerOpen={this.handleDrawerOpen}
-              openDrawer={this.state.openDrawer}
+              drawerOpen={this.state.drawerOpen}
               drawerWidth={this.drawerWidth}
+              socket={this.state.socket}
             />
             <MenuNavigarion 
               handleDrawerClose={this.handleDrawerClose}
-              openDrawer={this.state.openDrawer}
+              drawerOpen={this.state.drawerOpen}
               drawerWidth={this.drawerWidth}
               navigationLinks={navigationLinks}
             />

@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
       },
 }))
 
-const MenuNavigarion = ({ handleDrawerClose, openDrawer, navigationLinks }) => {
+const MenuNavigarion = ({ handleDrawerClose, drawerOpen, navigationLinks }) => {
     const classes = useStyles();
     const theme = useTheme();
     return (
@@ -50,7 +50,7 @@ const MenuNavigarion = ({ handleDrawerClose, openDrawer, navigationLinks }) => {
             className={classes.drawer}
             variant="persistent"
             anchor="left"
-            open={openDrawer}
+            open={drawerOpen}
             classes={{
                 paper: classes.drawerPaper,
             }}

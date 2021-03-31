@@ -9,7 +9,7 @@ let initialState = {
     login: null,
     password: null,
     token: null,
-    nickname: "Vladimir",
+    nickname: null,
     isAuth: false,
     status: null,
     error: null,
@@ -18,6 +18,7 @@ let initialState = {
 
 
 const authReducer = (state = initialState, action) => {
+    console.log(action);
     switch (action.type) {
         case SET_USER_DATA: {
             return {
@@ -50,10 +51,12 @@ const authReducer = (state = initialState, action) => {
 // action creators
 
 
-export const setUserData = (id, login, password, nickname, isAuth, status) => ({
+export const setUserData = (id, login, password, nickname, isAuth, status, token) => {
+    console.log(id, login, password, nickname, isAuth, status, token);
+    return {
     type: SET_USER_DATA,
-    id, login, password, nickname, isAuth, status
-});
+    id, login, password, nickname, isAuth, status, token
+}};
 
 export const setAuthError = (error) => ({
     type: SET_AUTH_ERROR,

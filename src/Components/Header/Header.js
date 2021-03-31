@@ -43,14 +43,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Header = ({ handleDrawerOpen, openDrawer, isAuth, nickname }) => {
-    console.log(isAuth, nickname);
+const Header = ({ handleDrawerOpen, drawerOpen, isAuth, nickname, socket }) => {
     const classes = useStyles();
     return (
         <AppBar 
             position="fixed" 
             className={clsx(classes.appBar, {
-                [classes.appBarShift]: openDrawer,
+                [classes.appBarShift]: drawerOpen,
           })}
         >
             <Container fixed>
@@ -60,7 +59,7 @@ const Header = ({ handleDrawerOpen, openDrawer, isAuth, nickname }) => {
                         edges="start"
                         color="inherit"
                         aria-label="menu"
-                        className={clsx(classes.menuButton, openDrawer && classes.hide)}
+                        className={clsx(classes.menuButton, drawerOpen && classes.hide)}
                         onClick={handleDrawerOpen}
                     >
                         <MenuIcon />
