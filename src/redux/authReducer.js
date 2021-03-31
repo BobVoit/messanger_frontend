@@ -2,16 +2,18 @@
 
 const SET_USER_DATA = 'SET_USER_DATA';
 const SET_AUTH_ERROR = 'SET_AUTH_ERROR';
+const SET_IS_SIGN_UP = 'SET_IS_SIGN_UP';
 
 let initialState = {
     id: null,
     login: null,
     password: null,
     token: null,
-    nickname: null,
+    nickname: "Vladimir",
     isAuth: false,
     status: null,
-    error: null
+    error: null,
+    isSignUp: false
 }
 
 
@@ -34,6 +36,12 @@ const authReducer = (state = initialState, action) => {
                 error: action.error,
             }
         }
+        case SET_IS_SIGN_UP: {
+            return {
+                ...state,
+                isSignUp: true
+            }
+        }
         default:
             return state;
     }
@@ -50,6 +58,10 @@ export const setUserData = (id, login, password, nickname, isAuth, status) => ({
 export const setAuthError = (error) => ({
     type: SET_AUTH_ERROR,
     error
+})
+
+export const setIsSignUp = () => ({
+    type: SET_IS_SIGN_UP
 })
 
 export default authReducer;

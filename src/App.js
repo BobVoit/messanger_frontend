@@ -92,7 +92,6 @@ let AppContainer = withStyles(useStyles)(App)
 
   
 const MainApp = () => {
-  console.log('render MainApp')
   return (
     <BrowserRouter>
       <Provider store={store}>

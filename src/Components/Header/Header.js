@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';   
 import { AppBar, Container, Toolbar, Button, Box, IconButton, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';	
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -33,9 +34,17 @@ const useStyles = makeStyles((theme) => ({
     hide: {
         display: 'none',
     },
+    logoutAndProfile: {
+        display: 'flex',
+        alignItems: 'center'
+    },
+    logout: {
+        marginLeft: theme.spacing(1)
+    }
 }))
 
-const Header = ({ handleDrawerOpen, openDrawer }) => {
+const Header = ({ handleDrawerOpen, openDrawer, isAuth, nickname }) => {
+    console.log(isAuth, nickname);
     const classes = useStyles();
     return (
         <AppBar 
@@ -46,6 +55,7 @@ const Header = ({ handleDrawerOpen, openDrawer }) => {
         >
             <Container fixed>
                 <Toolbar>
+                    {isAuth &&
                     <IconButton
                         edges="start"
                         color="inherit"
@@ -55,29 +65,51 @@ const Header = ({ handleDrawerOpen, openDrawer }) => {
                     >
                         <MenuIcon />
                     </IconButton>
+                }
                     <Typography 
                         variant="h6" 
                         className={classes.title}
                     >YourMsgs</Typography>
-                    <Box className={classes.login}>
-                        <Button
+                    {isAuth ? 
+                        <Box className={classes.logoutAndProfile}>
+                            <Typography
+                                variant="subtitle1"
+                                color="inherit"
+                            >{nickname}</Typography>
+                            <Button
+                                className={classes.logout}
+                                color="inherit"
+                                variant="outlined"
+                            >Выйти</Button>
+                        </Box>
+                    :
+                    <>
+                        <Box className={classes.login}>
+                            <Button
+                                component={NavLink}
+                                to='/signin' 
+                                color="inherit" 
+                                variant="outlined"
+                            >Войти</Button>
+                        </Box>
+                        <Button 
                             component={NavLink}
-                            to='/signin' 
-                            color="inherit" 
-                            variant="outlined"
-                        >Войти</Button>
-                    </Box>
-                    <Button 
-                        component={NavLink}
-                        to='/signup'
-                        color="secondary" 
-                        variant="contained"
-                    >Регистрация</Button>
+                            to='/signup'
+                            color="secondary" 
+                            variant="contained"
+                        >Регистрация</Button>
+                    </>
+                    }
                 </Toolbar>
             </Container>
         </AppBar>
     )
 }
 
+const mapStateToProps = (state) => ({
+    nickname: state.auth.nickname,
+    isAuth: state.auth.isAuth
+})
 
-export default Header;
+
+export default connect(mapStateToProps)(Header);

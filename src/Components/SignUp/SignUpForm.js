@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { NavLink } from 'react-router-dom';
 
 import { Box, Button, Divider, Link, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Input } from '../common/FormControl';
-import { NavLink } from 'react-router-dom';
+import { WebSocketContext } from '../WebSocket/WebSocket';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUpForm = () => {
     const classes = useStyles();
+    const ws = useContext(WebSocketContext);
+    console.log(ws);
+
     return (
         <div className={classes.root}>
             <Typography 
@@ -51,14 +55,18 @@ const SignUpForm = () => {
             <Formik
                 className={classes.form}
                 initialValues={{ 
-                    email: '' ,
+                    login: '' ,
+                    nickname: '',
                     password: '',
                     repeatPassword: '',
                 }}
                 validate={values => {
                     const errors = {};
-                    if (!values.email) {
-                        errors.email = 'Required';
+                    if (!values.login) {
+                        errors.login = 'Required';
+                    }
+                    if (!values.nickname) {
+                        errors.nickname = 'Required';
                     }
                     if (!values.password) {
                         errors.password = 'Required';
@@ -69,8 +77,10 @@ const SignUpForm = () => {
                     return errors;
                 }}
                 onSubmit={(values, {resetForm}) => {
+                    ws.registration(values);
                     resetForm({ 
-                        email: '',
+                        login: '',
+                        nickname: '',
                         password: '',
                         repeatPassword: ''
                     });
@@ -81,17 +91,26 @@ const SignUpForm = () => {
             }) => (
 
                 <Form className={classes.form}>
-                    <ErrorMessage className={classes.error} name="user" component="div" />
                     <Field 
                         className={classes.input}
                         value={values.email} 
                         as={Input} 
-                        name="email" 
-                        type="email"
-                        placeholder="Введите e-mail"
+                        name="login" 
+                        type="text"
+                        placeholder="Введите логин"
                         onChange={handleChange}
                     />
-                    <ErrorMessage className={classes.error} name="email" component="div" />
+                    <ErrorMessage className={classes.error} name="login" component="div" />
+                    <Field 
+                        className={classes.input}
+                        value={values.email} 
+                        as={Input} 
+                        name="nickname" 
+                        type="text"
+                        placeholder="Введите ваше имя"
+                        onChange={handleChange}
+                    />
+                    <ErrorMessage className={classes.error} name="nicname" component="div" />
                     <Field 
                         className={classes.input}
                         value={values.password} 
@@ -112,6 +131,9 @@ const SignUpForm = () => {
                         onChange={handleChange}
                     />
                     <ErrorMessage className={classes.error} name="repeatPassword" component="div" />
+                    <div className={classes.commonError}>
+                        <ErrorMessage className={classes.error} name="common" component="div" />
+                    </div>
                     <Box className={classes.submitBlock}>
                         <Button 
                             size="large"
