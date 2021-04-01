@@ -1,11 +1,14 @@
 import React from 'react';
 import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';   
 import { AppBar, Container, Toolbar, Button, Box, IconButton, Typography } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';	
-import { connect } from 'react-redux';
+
+import { logout } from '../../redux/authReducer';
+
 
 const useStyles = makeStyles((theme) => ({
     appBar: {
@@ -43,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Header = ({ handleDrawerOpen, drawerOpen, isAuth, nickname, socket }) => {
+const Header = ({ handleDrawerOpen, drawerOpen, isAuth, nickname, logout }) => {
     const classes = useStyles();
     return (
         <AppBar 
@@ -79,6 +82,7 @@ const Header = ({ handleDrawerOpen, drawerOpen, isAuth, nickname, socket }) => {
                                 className={classes.logout}
                                 color="inherit"
                                 variant="outlined"
+                                onClick={logout}
                             >Выйти</Button>
                         </Box>
                     :
@@ -111,4 +115,6 @@ const mapStateToProps = (state) => ({
 })
 
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, {
+    logout
+})(Header);

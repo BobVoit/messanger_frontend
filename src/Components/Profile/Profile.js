@@ -1,6 +1,10 @@
-import { Avatar, Box, Container, Typography } from '@material-ui/core';
 import React, { Component } from 'react';
+
+import { Avatar, Box, Container, Typography } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+
+import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+import { compose } from 'redux';
 
 const useStyles = theme => ({
     wrapper: {
@@ -41,4 +45,4 @@ class Profile extends Component {
     }
 }
 
-export default withStyles(useStyles)(Profile);
+export default compose(withStyles(useStyles), withAuthRedirect)(Profile);

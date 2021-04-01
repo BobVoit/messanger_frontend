@@ -1,115 +1,125 @@
-import React from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import React, { useContext } from 'react';
+import { Formik, Form, Field, ErrorMessage, useFormik } from 'formik';
+import { NavLink } from 'react-router-dom';
+import * as yup from 'yup';
 
-import { Box, Button, Typography } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { Input } from '../common/FormControl';
+import { WebSocketContext } from '../WebSocket/WebSocket';
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        marginTop: theme.spacing(20),
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    title: {
+        marginTop: theme.spacing(15)
     },
     form: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(2),
+        maxWidth: 500,
+        marginRight: 'auto',
+        marginLeft: 'auto',
+        marginTop: theme.spacing(5)
     },
-    submitBlock: {
-        marginTop: theme.spacing(5),
-        display: 'flex',
-        justifyContent: 'center'
+    field: {
+        marginBottom: theme.spacing(3)
     },
-    input: {
-        marginTop: theme.spacing(2),
-        width: 500,
+    submit: {
+        display: 'block',
+        marginRight: 'auto',
+        marginLeft: 'auto',
     },
     error: {
-        color: theme.palette.error.light
+        color: theme.palette.error.main,
+        textAlign: 'center',
+        marginTop: theme.spacing(3)
     },
-    goToSignIn: {
-        cursor: 'pointer'
-    }
 }))
 
 
-const SignInForm = () => {
+const validationSchema = yup.object({
+    login: yup 
+        .string("Введите логин")
+        .min(6, "Длина логина должна составлять не менее 6 символов")
+        .max(30, "Длина логина должна составлять не более 20 символов")
+        .required("Поле пустое"),
+    password: yup
+        .string("Введите пароль")
+        .min(6, "Длина пароля должна составлять не менее 6 символов")
+        .max(30, "Длина пароля должна составлять не более 20 символов")
+        .required("Поле пустое"),
+})
+
+
+const SignInForm = ({ loginUser }) => {
     const classes = useStyles();
+
+    const formik = useFormik({
+        initialValues: {
+            login: '',
+            password: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            const { login, password } = values;
+            loginUser(login, password);
+            formik.resetForm({
+                values: {
+                    login: '',
+                    password: '',
+                }
+            })
+        }
+    });
+
     return (
         <div className={classes.root}>
-            <Typography 
-                align="center"
-                variant="h3"
-                className={classes.title}
-            >Авторизация</Typography>
-            <Formik
+            <div className={classes.titleWrapper}>
+                <Typography
+                    align="center"
+                    gutterBottom
+                    noWrap
+                    variant="h3"
+                    component="h2"
+                >Авторизация</Typography>
+            </div>
+            <form 
+                onSubmit={formik.handleSubmit}
                 className={classes.form}
-                initialValues={{ 
-                    login: '' ,
-                    password: '',
-                }}
-                validate={values => {
-                    const errors = {};
-                    if (!values.login) {
-                        errors.login = 'Required';
-                    }
-                    if (!values.password) {
-                        errors.password = 'Required';
-                    }
-                    return errors;
-                }}
-                onSubmit={(values, {resetForm}) => {
-                    resetForm({ 
-                        login: '',
-                        password: '',
-                    });
-                }}
-            >{({
-                values,      
-                handleChange,
-            }) => (
-
-                <Form className={classes.form}>
-                    <ErrorMessage className={classes.error} name="user" component="div" />
-                    <Field 
-                        className={classes.input}
-                        value={values.login} 
-                        as={Input} 
-                        name="email" 
-                        type="email"
-                        placeholder="Введите e-mail"
-                        onChange={handleChange}
-                    />
-                    <Field 
-                        className={classes.input}
-                        value={values.password} 
-                        as={Input} 
-                        name="password" 
-                        type="password"
-                        placeholder="Введите пароль"
-                        onChange={handleChange}
-                    />
-                    <ErrorMessage className={classes.error} name="message" component="div" />
-                    <Box className={classes.submitBlock}>
-                        <Button 
-                            size="large"
-                            type="submit" 
-                            variant="contained"
-                            color="primary"
-                        >Войти</Button>
-                    </Box>
-                </Form>
-
-            )}
-            </Formik>
+            >
+            <TextField
+                fullWidth
+                variant="outlined"
+                id="login"
+                name="login"
+                label="Логин"
+                className={classes.field}
+                value={formik.values.login}
+                onChange={formik.handleChange}
+                error={formik.touched.login && Boolean(formik.errors.login)}
+                helperText={formik.touched.login && formik.errors.login}
+            />
+            <TextField
+                fullWidth
+                variant="outlined"
+                id="password"
+                name="password"
+                label="Password"
+                type="password"
+                className={classes.field}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password}
+            />
+            <Button 
+                color="primary" 
+                variant="contained" 
+                type="submit"
+                className={classes.submit}
+                size="large"
+            >
+                Войти
+            </Button>
+            </form>
         </div>
     )
 }

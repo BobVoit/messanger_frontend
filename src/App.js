@@ -9,11 +9,12 @@ import { navigationLinks } from './common';
 import store from './redux/store';
 
 import { ThemeProvider } from '@material-ui/styles';
-import { Box, CssBaseline } from '@material-ui/core';
+import { Box, CssBaseline, CircularProgress  } from '@material-ui/core';
 import { theme } from './theme/createTheme';
 import { withStyles } from '@material-ui/core/styles';
 
-import WebSocketProvider, { WebSocketContext } from './Components/WebSocket/WebSocket';
+// import WebSocketProvider, { WebSocketContext } from './Components/WebSocket/WebSocket';
+import { initializeApp } from './redux/appReducer';
 
 import Header from './Components/Header/Header';
 import MenuNavigarion from './Components/MenuNavigation/MenuNavigarion';
@@ -24,7 +25,7 @@ import Friends from './Components/Friends/Friends';
 import Users from './Components/Users/Users';
 import Dialogs from './Components/Dialogs/Dialogs';
 
-import Socket from './modules/Socket';
+
 
 const useStyles = theme => ({
   root: {
@@ -40,18 +41,12 @@ class App extends Component {
       drawerOpen: false
     }
     this.drawerWidth = 300;
-    this.state = {
-      // socket: null
-    }
   }
 
   componentDidMount() {
-    // this.setState({
-    //   socket: new Socket()
-    // })
+    this.props.initializeApp();
   }
   
-  static contextType = WebSocketContext;
 
   handleDrawerOpen = () => {
     this.setState({ drawerOpen: true });
@@ -63,10 +58,16 @@ class App extends Component {
 
 
   render() {
-    console.log(this.context);
+    
+    if (!this.props.initialized) {
+      return <CircularProgress color="secondary" size={50} />;
+    }
+
+
     const { classes } = this.props;
     return (
       <div className={classes.root}>
+        <Redirect to="/signin" />
         <CssBaseline />
         <ThemeProvider theme={theme}>
           <div>
@@ -97,19 +98,22 @@ class App extends Component {
   }
 }
 
-// let AppContainer = compose(withRouter, 
-//   connect())(App);
 
-let AppContainer = withStyles(useStyles)(App)
+const mapStateToProps = (state) => ({
+  initialized: state.app.initialized
+})
+
+let AppContainer = compose(withRouter, withStyles(useStyles),
+  connect(mapStateToProps, { initializeApp }))(App);
 
   
 const MainApp = () => {
   return (
     <BrowserRouter>
       <Provider store={store}>
-        <WebSocketProvider>
+        {/* <WebSocketProvider> */}
           <AppContainer />
-        </WebSocketProvider>
+        {/* </WebSocketProvider> */}
       </Provider>     
     </BrowserRouter>
   )
