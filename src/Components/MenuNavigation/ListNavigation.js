@@ -9,7 +9,7 @@ const ListNavigation = ({ navigationLinks }) => {
 
 
     return (
-        <List>
+        <List component="nav">
             {navigationLinks.map((item, index) => <ItemNavigation key={index} data={item} />)}
         </List>
     )

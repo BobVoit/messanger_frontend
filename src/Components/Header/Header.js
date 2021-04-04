@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
         alignItems: 'center'
     },
     logout: {
-        marginLeft: theme.spacing(1)
+        marginLeft: theme.spacing(2)
     }
 }))
 

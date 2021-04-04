@@ -24,6 +24,7 @@ import Profile from './Components/Profile/Profile';
 import Friends from './Components/Friends/Friends';
 import Users from './Components/Users/Users';
 import Dialogs from './Components/Dialogs/Dialogs';
+import Settings from './Components/Settings/Settings';
 
 
 
@@ -90,6 +91,7 @@ class App extends Component {
               <Route path="/friends" render={() => <Friends />} />
               <Route path="/users" render={() => <Users />} />
               <Route path="/dialogs" render={() => <Dialogs />} />
+              <Route path="/settings" render={() => <Settings />} />
             </Box>
           </div>
         </ThemeProvider>

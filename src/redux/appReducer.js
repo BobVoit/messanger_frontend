@@ -26,12 +26,10 @@ export const initializedSuccess = () => ({ type: INITIALIZED_SUCCESS });
 export const initializeApp = () => (dispatch) => {
     const token = localStorage.getItem('token');
     if (token) {
-        console.log(1);
         let promise = dispatch(getUserData(token));
         Promise.all([promise])
             .then(() => dispatch(initializedSuccess())) 
     } else {
-        console.log(2);
         dispatch(initializedSuccess());
     }
 }

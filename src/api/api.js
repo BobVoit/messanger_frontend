@@ -11,7 +11,7 @@ export const authAPI = {
         });
     },
     login(login, passHash, token, num) {
-        return instance.post('/auth/login', {
+        return instance.post('/auth/login   ', {
             login, passHash, token, num
         })
     },
@@ -23,5 +23,26 @@ export const authAPI = {
 export const usersAPI = {
     getUserData(token) {
         return instance.get(`/users/getUserData/${token}`);
+    }
+}
+
+export const avatarAPI = {
+    saveUserAvatar(token, avatar) {
+        const data = new FormData();
+        data.append('token', token);
+        data.append('avatar', avatar, avatar.name);
+        return instance.post('/avatar/saveAvatar', data);
+    },
+    getUserAvatar(token) {
+        return instance.get(`/avatar/getUserAvatar/${token}`);
+    },
+    updateUserAvatar(token, avatar) {
+        const data = new FormData();
+        data.append('token', token);
+        data.append('avatar', avatar, avatar.name);
+        return instance.post('/avatar/updateAvatar', data);
+    },
+    deleteUserAvatar(token) {
+        return instance.get(`/avatar/delete/${token}`);
     }
 }

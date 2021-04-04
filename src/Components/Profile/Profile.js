@@ -1,48 +1,64 @@
 import React, { Component } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import { Avatar, Box, Container, Typography } from '@material-ui/core';
+import { Container, } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import PersonIcon from '@material-ui/icons/Person';
 
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
-import { compose } from 'redux';
+import { saveUserAvatar } from '../../redux/authReducer';
+import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
+
+import ProfileInfo from './ProfileInfo';
 
 const useStyles = theme => ({
-    wrapper: {
+    root: {
         marginTop: theme.spacing(20),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
     },
-    avatar: {
-        width: theme.spacing(10),
-        height: theme.spacing(10),
-        marginBottom: theme.spacing(5)
+    titleIcon: {
+        width: theme.spacing(8),
+        height: theme.spacing(8),
     },
-    status: {
-        marginTop: theme.spacing(2),
-    }
 })
 
 class Profile extends Component {
     render() {
-        const { classes } = this.props;
+        const { classes, nickname, aboutText, saveUserAvatar, avatar } = this.props;
         return (
-            <Container fixed>
-                <Box className={classes.wrapper}>
-                    <Avatar
-                        className={classes.avatar}
-                    />
-                    <Typography 
-                        variant="h4"
-                    >Имя</Typography>
-                    <Typography
-                        variant="subtitle1"
-                        className={classes.status}
-                    >Тут будет статус</Typography>
-                </Box>
+            <Container fixed className={classes.root}>
+                <TitleTemplate 
+                    icon={<PersonIcon 
+                        color="secondary"
+                        className={classes.titleIcon}
+                    />}
+                    title="Профиль"
+                />
+                <ProfileInfo 
+                    nickname={nickname}
+                    avatar={avatar}
+                    aboutText={aboutText}
+                    saveUserAvatar={saveUserAvatar}
+                />
             </Container>
         )
     }
 }
 
-export default compose(withStyles(useStyles), withAuthRedirect)(Profile);
+Profile.propTypes = {
+    nickname: PropTypes.string,
+    aboutText: PropTypes.string,
+    avatar: PropTypes.string,
+    saveUserAvatar: PropTypes.func
+}
+
+const mapStateToProps = (state) => ({
+    nickname: state.auth.nickname,
+    aboutText: state.auth.aboutText,
+    avatar: state.auth.avatar
+})
+
+export default compose(withStyles(useStyles), connect(mapStateToProps, {
+    saveUserAvatar
+}), withAuthRedirect)(Profile);
