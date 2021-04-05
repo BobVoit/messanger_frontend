@@ -20,7 +20,7 @@ import UpdateNickname from './UpdataData/UpdateNickname';
 const useStyles = theme => ({
     root: {
         marginTop: theme.spacing(20),
-        width: 800,
+        maxWidth: 800,
     },
     titleBlock: {
         marginBottom: theme.spacing(3)

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button, Tooltip, Avatar } from '@material-ui/core';
+import { Button, Tooltip, Avatar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';  
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +15,7 @@ const UpdateAvatar = ({ onAvatarSelected, avatar }) => {
     const classes = useStyles();
     return (
         <>
+            <Typography variant="body2">Текущий аватар:</Typography>
             <Tooltip title="Текущий аватар" placement="right">
                 <Avatar
                     className={classes.avatar}
