@@ -18,8 +18,8 @@ const useStyles = theme => ({
         marginTop: theme.spacing(20),
     },
     titleIcon: {
-        width: theme.spacing(8),
-        height: theme.spacing(8),
+        width: theme.spacing(7),
+        height: theme.spacing(7),
     },
 })
 

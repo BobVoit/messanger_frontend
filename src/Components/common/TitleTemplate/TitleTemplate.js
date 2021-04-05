@@ -10,10 +10,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center'
     },
-    titleIcon: {
-        width: theme.spacing(6),
-        height: theme.spacing(6),
-    },
 }))
 
 

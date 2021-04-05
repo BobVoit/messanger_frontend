@@ -4,10 +4,11 @@ import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';   
-import { AppBar, Container, Toolbar, Button, Box, IconButton, Typography } from '@material-ui/core';
+import { AppBar, Container, Toolbar, Button, Box, IconButton, Typography, Link, Avatar } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';	
 
 import { logout } from '../../redux/authReducer';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -43,10 +44,16 @@ const useStyles = makeStyles((theme) => ({
     },
     logout: {
         marginLeft: theme.spacing(2)
+    },
+    avatar: {
+        display: 'block',
+        width: theme.spacing(5.5),
+        height: theme.spacing(5.5),
+        marginLeft: theme.spacing(2),
     }
 }))
 
-const Header = ({ handleDrawerOpen, drawerOpen, isAuth, nickname, logout }) => {
+const Header = ({ handleDrawerOpen, drawerOpen, isAuth, nickname, logout, avatar }) => {
     const classes = useStyles();
     return (
         <AppBar 
@@ -74,10 +81,16 @@ const Header = ({ handleDrawerOpen, drawerOpen, isAuth, nickname, logout }) => {
                     >YourMsgs</Typography>
                     {isAuth ? 
                         <Box className={classes.logoutAndProfile}>
-                            <Typography
+                            <Link
                                 variant="subtitle1"
-                                color="inherit"
-                            >{nickname}</Typography>
+                                color="secondary"
+                                component={NavLink}
+                                to="/profile"
+                            >{nickname}</Link>
+                            <Avatar 
+                                src={avatar ? avatar : null}
+                                className={classes.avatar}
+                            />
                             <Button
                                 className={classes.logout}
                                 color="inherit"
@@ -111,7 +124,8 @@ const Header = ({ handleDrawerOpen, drawerOpen, isAuth, nickname, logout }) => {
 
 const mapStateToProps = (state) => ({
     nickname: state.auth.nickname,
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    avatar: state.auth.avatar
 })
 
 

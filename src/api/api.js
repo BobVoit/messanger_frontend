@@ -20,9 +20,14 @@ export const authAPI = {
     }
 }
 
-export const usersAPI = {
+export const userAPI = {
     getUserData(token) {
         return instance.get(`/users/getUserData/${token}`);
+    },
+    updateUserNickname(nickname, token) {
+        return instance.post('/users/updateNickname', {
+            nickname, token
+        })
     }
 }
 

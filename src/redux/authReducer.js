@@ -1,4 +1,4 @@
-import { authAPI, usersAPI, avatarAPI } from '../api/api';
+import { authAPI, userAPI, avatarAPI } from '../api/api';
 import { hashUserData } from '../common';
 
 // constants
@@ -6,6 +6,7 @@ const SET_USER_DATA = 'SET_USER_DATA';
 const SET_AUTH_ERROR = 'SET_AUTH_ERROR';
 const SET_IS_SIGN_UP = 'SET_IS_SIGN_UP';
 const SET_AVATAR = 'SET_AVATAR';
+const SET_NICKNAME = 'SET_NICKNAME';
 
 
 // initial state
@@ -60,6 +61,12 @@ const authReducer = (state = initialState, action) => {
                 avatar: action.avatar
             }
         }
+        case SET_NICKNAME: {
+            return {
+                ...state,
+                nickname: action.nickname
+            }
+        }
         default:
             return state;
     }
@@ -82,9 +89,16 @@ export const setIsSignUp = () => ({
     type: SET_IS_SIGN_UP
 })
 
-export const setAvatar = (avatar) => ({
+export const setAvatar = (avatar) => {
+    console.log(avatar);
+    return {
     type: SET_AVATAR,
     avatar
+}}
+
+export const setNickname = (nickname) => ({
+    type: SET_NICKNAME,
+    nickname
 })
 
 
@@ -111,7 +125,7 @@ export const login = (login, password) => async (dispatch) => {
 }
 
 export const getUserData = (token) => async (dispatch) => {
-    let response = await usersAPI.getUserData(token);
+    let response = await userAPI.getUserData(token);
     const { result, data } = response.data;
     if (result === 'ok' && data) {
         const { id, login, password, nickname, status, token, aboutText, avatar } = data;
@@ -140,6 +154,24 @@ export const saveUserAvatar = (avatar) => async (dispatch) => {
     }
 }
 
+export const updateNickname = (newNickname) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    let response = await userAPI.updateUserNickname(newNickname, token);
+    const { result, data } = response.data;
+    if (result === 'ok' && data) {
+        dispatch(setNickname(data));
+    }
+}
+
+export const updateAvatar = (avatar) => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    let response = await avatarAPI.updateUserAvatar(token, avatar);
+    console.log(response);
+    const { result, data } = response.data;
+    if (result === 'ok' && data) {
+        dispatch(setAvatar(data));
+    }
+}
 
 
 export default authReducer;

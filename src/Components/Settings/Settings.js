@@ -3,12 +3,18 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Container, Paper, Avatar, Typography, List } from '@material-ui/core';
+import { Container, Paper, Avatar, Typography, List, Tooltip } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import SettingsIcon from '@material-ui/icons/Settings';
+import FaceIcon from '@material-ui/icons/Face';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+import { updateAvatar, updateNickname } from '../../redux/authReducer';
 import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
+import SettingsItem from './SettingsItem';
+import UpdateAvatar from './UpdataData/UpdateAvatar';
+import UpdateNickname from './UpdataData/UpdateNickname';
 
 
 const useStyles = theme => ({
@@ -20,22 +26,22 @@ const useStyles = theme => ({
         marginBottom: theme.spacing(3)
     },
     titleIconWrapper: {
-        display: 'flex',
-        justifyContent: 'center'
+        // display: 'flex',
+        // justifyContent: 'center'
     },
     titleIcon: {
-        width: theme.spacing(8),
-        height: theme.spacing(8),
+        width: theme.spacing(6),
+        height: theme.spacing(6),
     },
     paper: {
-        display: 'flex',
+        // display: 'flex',
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
         paddingRight: theme.spacing(3),
         paddingLeft: theme.spacing(3),
     },
     infoBlock: {
-        
+        paddingRight: theme.spacing(3)
     },
     avatarWrapper: {
         marginBottom: theme.spacing(2)
@@ -43,12 +49,61 @@ const useStyles = theme => ({
     avatar: {
         width: theme.spacing(10),
         height: theme.spacing(10),
+        marginBottom: theme.spacing(2)
+    },
+    list: {
+        flex: 1,
+    },
+    editBlock: {
+        marginTop: theme.spacing(5),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
     }
 })
 
 class Settings extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentItem: 0
+        }
+
+        this.items = [
+            { id: 1, icon: <FaceIcon />, title: "Изменить аватар" },
+            { id: 2, icon: <EditIcon />, title: "Изменить никнейм" }
+        ]
+    }
+
+    setSelectedItem = (id) => {
+        this.setState({ currentItem: id });
+    }
+
+    onAvatarSelected = (e) => {
+        if (e.target.files.length) {
+            this.props.updateAvatar(e.target.files[0]);
+        }
+    }
+
+    renderCurrentForm = (id) => {
+        switch (id) {
+            case 1: return <>
+                <UpdateAvatar 
+                    onAvatarSelected={this.onAvatarSelected}
+                    avatar={this.props.avatar}
+                />
+            </>;
+            case 2: return <UpdateNickname 
+                    updateNickname={this.props.updateNickname}
+                    nickname={this.props.nickname}
+                />;
+            default: return <></>;
+        }
+    }
+
+
     render() {
-        const { classes, avatar, nickname } = this.props;
+        const { classes } = this.props;
         return (
             <Container fixed className={classes.root}>
                 <TitleTemplate 
@@ -59,22 +114,21 @@ class Settings extends Component {
                     title="Настройки"
                 />
                 <Paper className={classes.paper}>
-                    <div className={classes.infoBlock}>
-                        <div className={classes.avatarWrapper}>
-                            <Avatar
-                                className={classes.avatar}
-                                src={avatar ? avatar : null}
-                            />
-                        </div>
-                        <Typography 
-                            variant="h5"
-                            align="center"
-                        >{nickname}</Typography>
-                    </div>
-                    <div>
-                        <List>
-                            {/* Сделать список пунктов, в каждом из которых будет изменение данных */}
+                    <div className={classes.list}>
+                        <List
+                        >
+                            {this.items.map(item => <SettingsItem 
+                                isCurrent={this.state.currentItem === item.id ? true : false}
+                                key={item.id} 
+                                id={item.id}
+                                icon={item.icon} 
+                                title={item.title} 
+                                selectItem={this.setSelectedItem}
+                            />)}
                         </List>
+                    </div>
+                    <div className={classes.editBlock}>
+                        {this.renderCurrentForm(this.state.currentItem)}
                     </div>
                 </Paper>
             </Container>
@@ -84,18 +138,20 @@ class Settings extends Component {
 
 Settings.propTypes = {
     nickname: PropTypes.string,
-    avatar: PropTypes.string
+    avatar: PropTypes.string,
+    updateAvatar: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
     avatar: state.auth.avatar,
-    nickname: state.auth.nickname
+    nickname: state.auth.nickname,
 })
 
 export default compose(
     withStyles(useStyles), 
     connect(mapStateToProps, {
-
+        updateAvatar,
+        updateNickname
     }),
     withAuthRedirect
 )(Settings);
