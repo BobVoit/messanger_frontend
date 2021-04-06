@@ -3,12 +3,11 @@ import { useFormik } from 'formik';
 import { NavLink } from 'react-router-dom';
 import * as yup from 'yup';
 
-
 import { Button, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import AccessibilityIcon from '@material-ui/icons/Accessibility';
 
-import { Input } from '../common/FormControl';
-import { WebSocketContext } from '../WebSocket/WebSocket';
+import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +32,10 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         marginTop: theme.spacing(3)
     },
+    titleIcon: {
+        width: theme.spacing(6),
+        height: theme.spacing(6),
+    }
 }))
 
 
@@ -86,6 +89,13 @@ const SignUpForm = ({ registration }) => {
 
     return (
         <div className={classes.root}>
+            <TitleTemplate 
+                title="Авторизация"
+                icon={<AccessibilityIcon 
+                    color="secondary"
+                    className={classes.titleIcon}
+                />}
+            />
             <div className={classes.titleWrapper}>
                 <Typography
                     align="center"

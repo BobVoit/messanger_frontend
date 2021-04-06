@@ -28,6 +28,14 @@ export const userAPI = {
         return instance.post('/users/updateNickname', {
             nickname, token
         })
+    },
+    updateUserAboutText(token, aboutText) {
+        return instance.post('/users/updateAboutText', {
+            token, aboutText
+        });
+    },
+    getUserAboutText(token) {
+        return instance.get(`/users/getAboutText/${token}`);
     }
 }
 

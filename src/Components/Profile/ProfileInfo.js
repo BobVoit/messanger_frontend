@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 
 import DisplayImageWindow from '../DisplayImageWindow/DisplayImageWindow';
+import TextAboutUser from './TextAboutUser';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         width: theme.spacing(15),
         height: theme.spacing(15),
+        cursor: 'pointer'
     },
     divider: {
         marginTop: theme.spacing(-3),
@@ -33,12 +35,9 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
         paddingLeft: theme.spacing(2),
     },
-    aboutText: {
-        textIndent: theme.spacing(2),
-    }
 }))
 
-const ProfileInfo = ({ nickname, aboutText, avatar, saveUserAvatar }) => {
+const ProfileInfo = ({ nickname, aboutText, avatar, saveUserAvatar, updateAboutText }) => {
     const classes = useStyles();
     const [openAvatarWindow, setOpenAvatarWindow] = useState(false);
 
@@ -85,17 +84,10 @@ const ProfileInfo = ({ nickname, aboutText, avatar, saveUserAvatar }) => {
             {nickname}
           </Typography>
           <Divider />
-          <div>
-            <Typography variant="subtitle2">Обо мне:</Typography>
-            <Typography
-              paragraph
-              component="p"
-              variant="body2"
-              className={classes.aboutText}
-            >
-              {aboutText}
-            </Typography>
-          </div>
+          <TextAboutUser 
+            aboutText={aboutText}
+            updateAboutText={updateAboutText}
+          />
         </div>
 
 

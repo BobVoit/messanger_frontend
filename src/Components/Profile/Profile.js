@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
-import { saveUserAvatar } from '../../redux/authReducer';
+import { saveUserAvatar, updateAboutText, getAboutText } from '../../redux/authReducer';
 import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 
 import ProfileInfo from './ProfileInfo';
@@ -25,7 +25,7 @@ const useStyles = theme => ({
 
 class Profile extends Component {
     render() {
-        const { classes, nickname, aboutText, saveUserAvatar, avatar } = this.props;
+        const { classes, nickname, aboutText, saveUserAvatar, avatar, updateAboutText, getAboutText } = this.props;
         return (
             <Container fixed className={classes.root}>
                 <TitleTemplate 
@@ -40,6 +40,7 @@ class Profile extends Component {
                     avatar={avatar}
                     aboutText={aboutText}
                     saveUserAvatar={saveUserAvatar}
+                    updateAboutText={updateAboutText}
                 />
             </Container>
         )
@@ -50,7 +51,8 @@ Profile.propTypes = {
     nickname: PropTypes.string,
     aboutText: PropTypes.string,
     avatar: PropTypes.string,
-    saveUserAvatar: PropTypes.func
+    saveUserAvatar: PropTypes.func,
+    updateAboutText: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
@@ -60,5 +62,6 @@ const mapStateToProps = (state) => ({
 })
 
 export default compose(withStyles(useStyles), connect(mapStateToProps, {
-    saveUserAvatar
+    saveUserAvatar,
+    updateAboutText,
 }), withAuthRedirect)(Profile);

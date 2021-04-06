@@ -7,6 +7,7 @@ const SET_AUTH_ERROR = 'SET_AUTH_ERROR';
 const SET_IS_SIGN_UP = 'SET_IS_SIGN_UP';
 const SET_AVATAR = 'SET_AVATAR';
 const SET_NICKNAME = 'SET_NICKNAME';
+const SET_ABOUT_TEXT = 'SET_ABOUT_TEXT';
 
 
 // initial state
@@ -67,6 +68,12 @@ const authReducer = (state = initialState, action) => {
                 nickname: action.nickname
             }
         }
+        case SET_ABOUT_TEXT: {
+            return {
+                ...state,
+                aboutText: action.aboutText
+            }
+        }
         default:
             return state;
     }
@@ -99,6 +106,11 @@ export const setAvatar = (avatar) => {
 export const setNickname = (nickname) => ({
     type: SET_NICKNAME,
     nickname
+})
+
+export const setAboutText = (aboutText) => ({
+    type: SET_ABOUT_TEXT,
+    aboutText
 })
 
 
@@ -166,10 +178,27 @@ export const updateNickname = (newNickname) => async (dispatch) => {
 export const updateAvatar = (avatar) => async (dispatch) => {
     const token = localStorage.getItem('token');
     let response = await avatarAPI.updateUserAvatar(token, avatar);
-    console.log(response);
     const { result, data } = response.data;
     if (result === 'ok' && data) {
         dispatch(setAvatar(data));
+    }
+}
+
+export const updateAboutText = (aboutText) => async(dispatch) => {
+    const token = localStorage.getItem('token');
+    let response = await userAPI.updateUserAboutText(token, aboutText);
+    const { result, data } = response.data;
+    if (result === 'ok' && (data || data === "")) {
+        dispatch(setAboutText(data));
+    }
+}
+
+export const getAboutText = () => async(dispatch) => {
+    const token = localStorage.getItem('token');
+    let response = await userAPI.getUserAboutText(token);
+    const { result, data } = response.data;
+    if (result === 'ok' && data) {
+        dispatch(setAboutText(data));
     }
 }
 

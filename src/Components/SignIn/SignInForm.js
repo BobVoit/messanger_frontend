@@ -5,9 +5,10 @@ import * as yup from 'yup';
 
 import { Button, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-import { Input } from '../common/FormControl';
-import { WebSocketContext } from '../WebSocket/WebSocket';
+import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         marginTop: theme.spacing(3)
     },
+    titleIcon: {
+        width: theme.spacing(6),
+        height: theme.spacing(6),
+    }
 }))
 
 
@@ -72,15 +77,13 @@ const SignInForm = ({ loginUser }) => {
 
     return (
         <div className={classes.root}>
-            <div className={classes.titleWrapper}>
-                <Typography
-                    align="center"
-                    gutterBottom
-                    noWrap
-                    variant="h3"
-                    component="h2"
-                >Авторизация</Typography>
-            </div>
+            <TitleTemplate 
+                title="Авторизация"
+                icon={<LockOutlinedIcon 
+                    color="secondary"
+                    className={classes.titleIcon}
+                />}
+            />
             <form 
                 onSubmit={formik.handleSubmit}
                 className={classes.form}

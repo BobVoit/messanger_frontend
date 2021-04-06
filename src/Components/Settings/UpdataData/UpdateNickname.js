@@ -7,11 +7,6 @@ import { makeStyles } from '@material-ui/core/styles';
 
 
 const useStyles = makeStyles((theme) => ({
-    avatar: {
-        width: theme.spacing(10),
-        height: theme.spacing(10),
-        marginBottom: theme.spacing(2)
-    },
     form: {
         marginTop: theme.spacing(2),
         display: 'flex',
