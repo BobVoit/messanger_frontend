@@ -12,11 +12,11 @@ export const navigationLinks = [
         icon: <PersonIcon />,
         link: "/profile"
     },
-    {
-        title: "Друзья",
-        icon: <PeopleIcon />,
-        link: "/friends"
-    },
+    // {
+    //     title: "Друзья",
+    //     icon: <PeopleIcon />,
+    //     link: "/friends"
+    // },
     {
         title: "Диалоги",
         icon: <ChatIcon />,

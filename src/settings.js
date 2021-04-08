@@ -3,7 +3,7 @@ export const SETTINGS = {
     WS_BASE: "ws://localhost:3001",
 
     // события сокетов
-    SOCKETS_EVENTS: {
+    MESSAGES: {
         LOGIN: 'LOGIN',
         REGISTRATION: 'REGISTRATION',
         LOGOUT: 'LOGOUT',

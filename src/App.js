@@ -13,7 +13,7 @@ import { Box, CssBaseline, CircularProgress  } from '@material-ui/core';
 import { theme } from './theme/createTheme';
 import { withStyles } from '@material-ui/core/styles';
 
-// import WebSocketProvider, { WebSocketContext } from './Components/WebSocket/WebSocket';
+import WebSocketProvider, { WebSocketContext } from './Components/WebSocket/WebSocket';
 import { initializeApp } from './redux/appReducer';
 
 import Header from './Components/Header/Header';
@@ -113,9 +113,9 @@ const MainApp = () => {
   return (
     <BrowserRouter>
       <Provider store={store}>
-        {/* <WebSocketProvider> */}
+        <WebSocketProvider>
           <AppContainer />
-        {/* </WebSocketProvider> */}
+        </WebSocketProvider>
       </Provider>     
     </BrowserRouter>
   )

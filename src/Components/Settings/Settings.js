@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Container, Paper, Avatar, Typography, List, Tooltip } from '@material-ui/core';
+import { Container, Paper, List } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FaceIcon from '@material-ui/icons/Face';

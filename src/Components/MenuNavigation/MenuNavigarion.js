@@ -68,6 +68,7 @@ const MenuNavigarion = ({ handleDrawerClose, drawerOpen, navigationLinks }) => {
 
             <ListNavigation
                 navigationLinks={navigationLinks}
+                handleDrawerClose={handleDrawerClose}
             />
             
         </Drawer> 

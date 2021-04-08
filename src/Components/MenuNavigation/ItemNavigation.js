@@ -3,7 +3,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 
-const ItemNavigation = ({ data }) => {
+const ItemNavigation = ({ data, handleDrawerClose }) => {
     const { title, icon, link } = data;
 
     // const redirect = () => {
@@ -17,6 +17,7 @@ const ItemNavigation = ({ data }) => {
             to={link}
             button
             divider
+            onClick={handleDrawerClose}
         >
             <ListItemIcon>{icon}</ListItemIcon>
             <ListItemText  primary={title} />
