@@ -1,5 +1,6 @@
 import { authAPI, userAPI, avatarAPI } from '../api/api';
 import { hashUserData } from '../common';
+import { SETTINGS } from '../settings';
 
 // constants
 const SET_USER_DATA = 'SET_USER_DATA';
@@ -8,6 +9,8 @@ const SET_IS_SIGN_UP = 'SET_IS_SIGN_UP';
 const SET_AVATAR = 'SET_AVATAR';
 const SET_NICKNAME = 'SET_NICKNAME';
 const SET_ABOUT_TEXT = 'SET_ABOUT_TEXT';
+const SET_ERROR = 'SET_ERROR';
+const CLEAR_ERROR = 'CLEAR_ERROR';
 
 
 // initial state
@@ -27,7 +30,6 @@ let initialState = {
 
 
 // reducer
-
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_USER_DATA: {
@@ -74,6 +76,18 @@ const authReducer = (state = initialState, action) => {
                 aboutText: action.aboutText
             }
         }
+        case SET_ERROR: {
+            return {
+                ...state,
+                error: action.error
+            }
+        }
+        case CLEAR_ERROR: {
+            return {
+                ...state,
+                error: null
+            }
+        }
         default:
             return state;
     }
@@ -113,6 +127,14 @@ export const setAboutText = (aboutText) => ({
     aboutText
 })
 
+export const setError = (error) => ({
+    type: SET_ERROR,
+    error
+})
+
+export const clearError = () => ({
+    type: CLEAR_ERROR
+})
 
 // thunk
 
@@ -123,6 +145,9 @@ export const registration = (login, nickname, password) => async (dispatch) => {
     if (result === 'ok' && data) {
         localStorage.setItem('token', data);
         dispatch(getUserData(data));
+        dispatch(clearError());
+    } else if (result === 'ok' && !data) {
+        dispatch(setError(SETTINGS.ERRORS[0].error));
     }
 }
 
@@ -133,6 +158,9 @@ export const login = (login, password) => async (dispatch) => {
     if (result === 'ok' && data) {
         localStorage.setItem('token', data);
         dispatch(getUserData(data));
+        dispatch(clearError());
+    } else if (result === 'ok' && !data) {
+        dispatch(setError(SETTINGS.ERRORS[1].error));
     }
 }
 

@@ -34,6 +34,7 @@ export const navigationLinks = [
     }
 ];
 
+// хэширование данных
 export const hashUserData = (login, password) => {
     const num = Math.round(Math.random() * 1000000);
     const passHash = md5(login + password);

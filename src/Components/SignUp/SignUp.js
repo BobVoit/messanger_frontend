@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const SignUp = ({ setIsSignUp, isAuth, isSignUp, registration }) => {
+const SignUp = ({ setIsSignUp, isAuth, isSignUp, registration, errorAuth }) => {
     const classes = useStyles();
 
     if (isAuth) {
@@ -28,6 +28,7 @@ const SignUp = ({ setIsSignUp, isAuth, isSignUp, registration }) => {
                 setIsSignUp={setIsSignUp}
                 isSignUp={isSignUp}
                 registration={registration}
+                errorAuth={errorAuth}
             />
         </Container>
     )
@@ -35,7 +36,8 @@ const SignUp = ({ setIsSignUp, isAuth, isSignUp, registration }) => {
 
 const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
-    isSignUp: state.auth.isSignUp
+    isSignUp: state.auth.isSignUp,
+    errorAuth: state.auth.error
 })
 
 export default connect(mapStateToProps, {

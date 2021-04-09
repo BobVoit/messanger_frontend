@@ -17,20 +17,42 @@ class WebSocketProvider extends Component {
         this.SETTINGS = SETTINGS;
 
         this.socket = socket;
-        this.socket.connect();
+
+        if (this.props.isAuth) {
+            console.log(this.socket);
+        }
 
         const { REGISTRATION, LOGIN, LOGOUT, GET_USER_DATA } = this.SETTINGS.MESSAGES;
 
         this.socket.on('connect', () => {
-            console.log(this.socket.id);
+            console.log('connect', this.socket.id);
+
+            if (this.props.isAuth) {
+                this.setConnection();
+            }
+
         });
+
+        this.socket.on('disconnect', () => {
+            console.log('disconnect', this.socket.id);
+        })
+
         this.socket.on('message', data => {
             console.log(data);
         })
 
         this.ws = {
             socket: this.socket,
-            sendMessage: this.sendMessage
+            sendMessage: this.sendMessage,
+            setConnection: this.setConnection
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.isAuth !== prevProps.isAuth && this.props.isAuth) {
+            this.socket.connect();
+        } else if (this.props.isAuth !== prevProps.isAuth && !this.props.isAuth) {
+            this.socket.disconnect();
         }
     }
 
@@ -38,7 +60,12 @@ class WebSocketProvider extends Component {
         this.socket.emit('message', { user, message });
     }
 
+    setConnection = () => {
+        this.socket.emit(this.SETTINGS.MESSAGES.SET_CONNECT, { token: this.props.token });
+    }
+
     render() {
+        console.log('render');
         return (
             <WebSocketContext.Provider value={this.ws}>
                 {this.props.children}
@@ -48,12 +75,12 @@ class WebSocketProvider extends Component {
 }
 
 WebSocketProvider.propTypes = {
-    setAuthError: PropTypes.func,
-    setUserData: PropTypes.func,
-    token: PropTypes.string,   
+    
 }
 
 const mapStateToProps = (state) => ({
+    isAuth: state.auth.isAuth,
+    token: state.auth.token
 })
 
 export default connect(mapStateToProps, {

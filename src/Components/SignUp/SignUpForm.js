@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { useFormik } from 'formik';
 import { NavLink } from 'react-router-dom';
 import * as yup from 'yup';
+import { WebSocketContext } from '../WebSocket/WebSocket';
 
 import { Button, TextField, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -29,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     },
     error: {
         color: theme.palette.error.main,
-        textAlign: 'center',
         marginTop: theme.spacing(3)
     },
     titleIcon: {
@@ -62,8 +62,10 @@ const validationSchema = yup.object({
 })
 
 
-const SignUpForm = ({ registration }) => {
+const SignUpForm = ({ registration, errorAuth }) => {
     const classes = useStyles();
+    const ws = useContext(WebSocketContext);
+    console.log(ws);
 
     const formik = useFormik({
         initialValues: {
@@ -74,7 +76,6 @@ const SignUpForm = ({ registration }) => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values.login, values.nickname, values.password, values.confirmPassword);
             registration(values.login, values.nickname, values.password)
             formik.resetForm({
                 values: {
@@ -169,6 +170,12 @@ const SignUpForm = ({ registration }) => {
                     Зарегистрироваться
                 </Button>
             </form>
+            <Typography
+                display="block"
+                variant="body2"
+                className={classes.error}
+                align="center"
+            >{errorAuth}</Typography>
         </div>
     )
 }

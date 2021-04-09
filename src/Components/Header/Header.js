@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(2)
     },
     avatar: {
-        display: 'block',
         width: theme.spacing(5.5),
         height: theme.spacing(5.5),
         marginLeft: theme.spacing(2),

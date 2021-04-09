@@ -3,11 +3,13 @@ import thunkMiddleware from 'redux-thunk';
 
 import authReducer from './authReducer';
 import appReducer from './appReducer';
+import chatReducer from './chatReducer';
 
 
 let reducers = combineReducers({
     auth: authReducer,
-    app: appReducer
+    app: appReducer,
+    chat: chatReducer
 });
 
 let store = createStore(reducers, applyMiddleware(thunkMiddleware));
