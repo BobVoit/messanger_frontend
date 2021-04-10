@@ -1,4 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { Container, Grid } from '@material-ui/core';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -7,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 import DialogBox from './DialogBox/DialogBox';
 import Conversations from './Conversations/Conversations';
+import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 
 
 const useStyles = theme => ({
@@ -24,16 +28,9 @@ const useStyles = theme => ({
 
 class Dialogs extends Component {
     render() {
-        const { classes } = this.props;
+        const { classes, activeUsers } = this.props;
         return (
             <Container fixed className={classes.root}>
-                {/* <TitleTemplate 
-                    icon={<ChatIcon 
-                        color="secondary"
-                        className={classes.titleIcon}
-                    />}
-                    title="Диалоги"
-                /> */}
                 <Grid 
                     container 
                     className={classes.gridContainer}
@@ -41,7 +38,9 @@ class Dialogs extends Component {
                     spacing={2}
                 >
                     <Grid item sm={4} md={4}>
-                        <Conversations rrr={3} />
+                        <Conversations
+                            activeUsers={activeUsers}
+                        />
                     </Grid>
 
                     <Grid item sm={8} md={8}>
@@ -53,4 +52,19 @@ class Dialogs extends Component {
     }
 }
 
-export default withStyles(useStyles)(Dialogs);
+Dialogs.propTypes = {
+    activeUsers: PropTypes.array,
+
+}
+
+const mapStateToProps = (state) => ({
+    activeUsers: state.users.activeUsers
+})
+
+export default compose(
+    withStyles(useStyles),
+    withAuthRedirect,
+    connect(mapStateToProps, {
+
+    })
+)(Dialogs);

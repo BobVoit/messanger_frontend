@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import socket from '../../service/socket';
+import { setAllActiveUsers, setNewActiveUser, removeDisactiveUser } from '../../redux/usersReducer';
 
 const WebSocketContext = createContext(null);
 
@@ -18,11 +19,7 @@ class WebSocketProvider extends Component {
 
         this.socket = socket;
 
-        if (this.props.isAuth) {
-            console.log(this.socket);
-        }
-
-        const { REGISTRATION, LOGIN, LOGOUT, GET_USER_DATA } = this.SETTINGS.MESSAGES;
+        const { GET_ALL_ACTIVE_USERS, USER_CONNECT, USER_DISCONNECT } = this.SETTINGS.MESSAGES;
 
         this.socket.on('connect', () => {
             console.log('connect', this.socket.id);
@@ -37,9 +34,19 @@ class WebSocketProvider extends Component {
             console.log('disconnect', this.socket.id);
         })
 
-        this.socket.on('message', data => {
+        this.socket.on(GET_ALL_ACTIVE_USERS, data => {
             console.log(data);
+            this.props.setAllActiveUsers(data);
         })
+        this.socket.on(USER_CONNECT, data => {
+            console.log(data);
+            this.props.setNewActiveUser(data);
+        })
+        this.socket.on(USER_DISCONNECT, data => {
+            console.log(USER_DISCONNECT);
+            this.props.removeDisactiveUser(data);
+        })
+
 
         this.ws = {
             socket: this.socket,
@@ -65,7 +72,6 @@ class WebSocketProvider extends Component {
     }
 
     render() {
-        console.log('render');
         return (
             <WebSocketContext.Provider value={this.ws}>
                 {this.props.children}
@@ -75,7 +81,11 @@ class WebSocketProvider extends Component {
 }
 
 WebSocketProvider.propTypes = {
-    
+    isAuth: PropTypes.bool,
+    token: PropTypes.string,
+    setAllActiveUsers: PropTypes.func,
+    setNewActiveUser: PropTypes.func,
+    removeDisactiveUser: PropTypes.func,
 }
 
 const mapStateToProps = (state) => ({
@@ -84,4 +94,7 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect(mapStateToProps, {
+    setAllActiveUsers,
+    setNewActiveUser,
+    removeDisactiveUser
 })(WebSocketProvider);
