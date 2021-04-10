@@ -4,7 +4,7 @@ import { Avatar, Box, Container, Divider, IconButton, Paper, Typography } from '
 import { makeStyles } from '@material-ui/core/styles';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 
-import DisplayImageWindow from '../DisplayImageWindow/DisplayImageWindow';
+import DisplayImageWindow from '../DialogWindows/DisplayImageWindow';
 import TextAboutUser from './TextAboutUser';
 
 const useStyles = makeStyles((theme) => ({

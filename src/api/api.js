@@ -56,6 +56,6 @@ export const avatarAPI = {
         return instance.post('/avatar/updateAvatar', data);
     },
     deleteUserAvatar(token) {
-        return instance.get(`/avatar/delete/${token}`);
+        return instance.get(`/avatar/deleteAvatar/${token}`);
     }
 }

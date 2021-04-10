@@ -212,6 +212,15 @@ export const updateAvatar = (avatar) => async (dispatch) => {
     }
 }
 
+export const deleteAvatar  = () => async (dispatch) => {
+    const token = localStorage.getItem('token');
+    let response = await avatarAPI.deleteUserAvatar(token);
+    const { result, data } = response.data;
+    if (result === 'ok' && data) {
+        dispatch(setAvatar(null));
+    }
+}
+
 export const updateAboutText = (aboutText) => async(dispatch) => {
     const token = localStorage.getItem('token');
     let response = await userAPI.updateUserAboutText(token, aboutText);

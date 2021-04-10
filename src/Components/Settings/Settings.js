@@ -10,7 +10,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import EditIcon from '@material-ui/icons/Edit';
 
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
-import { updateAvatar, updateNickname } from '../../redux/authReducer';
+import { updateAvatar, updateNickname, deleteAvatar, saveUserAvatar } from '../../redux/authReducer';
 import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 import SettingsItem from './SettingsItem';
 import UpdateAvatar from './UpdataData/UpdateAvatar';
@@ -79,17 +79,13 @@ class Settings extends Component {
         this.setState({ currentItem: id });
     }
 
-    onAvatarSelected = (e) => {
-        if (e.target.files.length) {
-            this.props.updateAvatar(e.target.files[0]);
-        }
-    }
-
     renderCurrentForm = (id) => {
         switch (id) {
             case 1: return <>
                 <UpdateAvatar 
-                    onAvatarSelected={this.onAvatarSelected}
+                    updateAvatar={this.props.updateAvatar}
+                    deleteAvatar={this.props.deleteAvatar}
+                    saveUserAvatar={this.props.saveUserAvatar}
                     avatar={this.props.avatar}
                 />
             </>;
@@ -105,7 +101,10 @@ class Settings extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <Container fixed className={classes.root}>
+            <Container 
+                fixed 
+                className={classes.root}
+            >
                 <TitleTemplate 
                     icon={<SettingsIcon   
                         color="secondary"
@@ -139,7 +138,10 @@ class Settings extends Component {
 Settings.propTypes = {
     nickname: PropTypes.string,
     avatar: PropTypes.string,
-    updateAvatar: PropTypes.func
+    updateAvatar: PropTypes.func,
+    deleteAvatar: PropTypes.func,
+    updateNickname: PropTypes.func,
+    saveUserAvatar: PropTypes.func,
 }
 
 const mapStateToProps = (state) => ({
@@ -151,7 +153,9 @@ export default compose(
     withStyles(useStyles), 
     connect(mapStateToProps, {
         updateAvatar,
-        updateNickname
+        updateNickname,
+        deleteAvatar,
+        saveUserAvatar
     }),
     withAuthRedirect
 )(Settings);
