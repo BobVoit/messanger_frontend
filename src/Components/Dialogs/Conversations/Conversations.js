@@ -12,8 +12,9 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',  
         backgroundColor: theme.palette.background.paper,
         boxShadow: theme.shadows[5],
-        height: 665,
-        position: 'relative'
+        minHeight: 665,
+        position: 'relative',
+        paddingBottom: theme.spacing(0.5),
     },
     header: {
         display: 'flex',

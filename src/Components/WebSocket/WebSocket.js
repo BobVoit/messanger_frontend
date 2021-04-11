@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import socket from '../../service/socket';
 import { setAllActiveUsers, setNewActiveUser, removeDisactiveUser } from '../../redux/usersReducer';
-import { setAllMessages } from '../../redux/chatReducer';
+import { setAllMessages, addMessage } from '../../redux/chatReducer';
 
 const WebSocketContext = createContext(null);
 
@@ -42,6 +42,8 @@ class WebSocketProvider extends Component {
 
         this.socket.on(GET_ALL_MESSAGES, data => this.props.setAllMessages(data));
 
+        this.socket.on(PRIVATE_MESSAGE, data => this.props.addMessage(data));
+
         this.ws = {
             socket: this.socket,
             sendMessage: this.sendMessage,
@@ -58,8 +60,11 @@ class WebSocketProvider extends Component {
         }
     }
 
-    sendMessage = (user, message) => {
-        this.socket.emit('message', { user, message });
+    sendMessage = (data) => { // text, from, to, socketIdTo
+        const dt = new Date();
+        const date = dt.toLocaleDateString();
+        const time = dt.toLocaleTimeString();
+        this.socket.emit(this.SETTINGS.MESSAGES.PRIVATE_MESSAGE, { ...data, date, time });
     }
 
     setConnection = () => {
@@ -86,6 +91,7 @@ WebSocketProvider.propTypes = {
     setAllActiveUsers: PropTypes.func,
     setNewActiveUser: PropTypes.func,
     removeDisactiveUser: PropTypes.func,
+    addMessage: PropTypes.func,
 }
 
 const mapStateToProps = (state) => ({
@@ -98,5 +104,6 @@ export default connect(mapStateToProps, {
     setAllActiveUsers,
     setNewActiveUser,
     removeDisactiveUser,
-    setAllMessages
+    setAllMessages,
+    addMessage
 })(WebSocketProvider);

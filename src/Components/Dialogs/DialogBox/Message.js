@@ -10,16 +10,15 @@ const useStyles = makeStyles(theme => ({
         marginRight: theme.spacing(3),
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
+        paddingRight: theme.spacing(2),
+        paddingLeft: theme.spacing(2),
         boxShadow: theme.shadows[2],
         padding: theme.spacing(1),
         alignSelf: props.isSelf ? 'flex-end' : 'flex-start',
     }),
     whoSend: { 
-        marginLeft: theme.spacing(2) 
     },
     text: {
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(1),
         textIndent: theme.spacing(1)
     }
 }))

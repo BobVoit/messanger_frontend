@@ -43,7 +43,7 @@ const validationSchema = yup.object({
 })
 
 
-const MessageForm = () => {
+const MessageForm = ({ currentCompanion, selfId }) => {
     const classes = useStyles();
     const ws = useContext(WebSocketContext);
 
@@ -54,7 +54,12 @@ const MessageForm = () => {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             const { message } = values;
-            ws.sendMessage("Илья", message);
+            ws.sendMessage({ 
+                text: message,
+                from: selfId,
+                to: currentCompanion.id,
+                socketIdTo: currentCompanion.socketId
+            })
             formik.resetForm({
                 values: {
                     message: ''
