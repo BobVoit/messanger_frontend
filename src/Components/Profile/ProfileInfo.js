@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Avatar, Box, Container, Divider, IconButton, Paper, Typography } from '@material-ui/core';
+import { Avatar, Divider, IconButton, Paper, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 

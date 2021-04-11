@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useFormik } from 'formik';
 import { NavLink } from 'react-router-dom';
 import * as yup from 'yup';
-import { WebSocketContext } from '../WebSocket/WebSocket';
 
-import { Button, TextField, Typography } from '@material-ui/core';
+import { Button, TextField, Typography, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AccessibilityIcon from '@material-ui/icons/Accessibility';
 
@@ -35,6 +34,12 @@ const useStyles = makeStyles((theme) => ({
     titleIcon: {
         width: theme.spacing(6),
         height: theme.spacing(6),
+    },
+    linkToAuth: {
+        display: 'block',
+        fontSize: 16,
+        fontWeight: theme.typography.fontWeightMedium,
+        textAlign: 'center'
     }
 }))
 
@@ -64,8 +69,6 @@ const validationSchema = yup.object({
 
 const SignUpForm = ({ registration, errorAuth }) => {
     const classes = useStyles();
-    const ws = useContext(WebSocketContext);
-    console.log(ws);
 
     const formik = useFormik({
         initialValues: {
@@ -176,6 +179,11 @@ const SignUpForm = ({ registration, errorAuth }) => {
                 className={classes.error}
                 align="center"
             >{errorAuth}</Typography>
+            <Link
+                component={NavLink}
+                to="/signin"
+                className={classes.linkToAuth}
+            >Перейти к авторизации</Link>
         </div>
     )
 }

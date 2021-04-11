@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
-import { saveUserAvatar, updateAboutText, getAboutText } from '../../redux/authReducer';
+import { saveUserAvatar, updateAboutText } from '../../redux/authReducer';
 import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 
 import ProfileInfo from './ProfileInfo';
@@ -25,7 +25,7 @@ const useStyles = theme => ({
 
 class Profile extends Component {
     render() {
-        const { classes, nickname, aboutText, saveUserAvatar, avatar, updateAboutText, getAboutText } = this.props;
+        const { classes, nickname, aboutText, saveUserAvatar, avatar, updateAboutText } = this.props;
         return (
             <Container fixed className={classes.root}>
                 <TitleTemplate 

@@ -12,25 +12,25 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         flexDirection: 'column-reverse',
         paddingBottom: theme.spacing(1)
+    },
+    messages: {
+        display: 'flex',
+        flexDirection: 'column',
     }
 }))
 
-const ListMessages = () => {
+const ListMessages = ({ messages, selfId, currentCompanion }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <Message 
-                text="Привет мир!!! Питон топ, пока ещё не заебал, как кого то js)"
-                whoSend="Илья"
-            />
-            <Message 
-                text="Сокеты сосать"
-                whoSend="Вова"
-            />
-            <Message 
-                text="Сокеты сосать дплвопв лщлащп щзвлпщза щлпал."
-                whoSend="Вова"
-            />
+            <div className={classes.messages}>
+                {messages.map( message => <Message 
+                    key={message.id}
+                    isSelf={selfId === message.fromId}
+                    text={message.text}
+                    whoSend={selfId === message.fromId ? "Вы:" : currentCompanion.nickname}
+                />)}
+            </div>
         </div>
     )
 }

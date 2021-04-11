@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Conversations = ({ activeUsers }) => {
+const Conversations = ({ activeUsers, selectCompanion, selectedCompanionId }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -48,7 +48,12 @@ const Conversations = ({ activeUsers }) => {
                 dense
                 className={classes.list}
             >
-                {activeUsers.map(user => <ConversationsItem key={user.id} user={user} />)}
+                {activeUsers.map(user => <ConversationsItem 
+                    isSelect={selectedCompanionId === user.id}
+                    key={user.id} 
+                    user={user} 
+                    selectCompanion={selectCompanion}
+                />)}
             </List>
         </div>
     )

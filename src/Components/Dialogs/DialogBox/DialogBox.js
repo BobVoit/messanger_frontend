@@ -31,33 +31,30 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const messages = [
-    { user: "Egor", text: "Как твое дела?" },
-    { user: "Egor", text: "Как твое дела?" },
-    { user: "Egor", text: "Как твое дела?" },
-    { user: "Egor", text: "Как твое дела?" },
-    { user: "Egor", text: "Как твое дела?" },
-    { user: "Egor", text: "Как твое дела?" },
-    { user: "Egor", text: "Как твое дела?" },
-];
-
-const DialogBox = ({ companionAvatar, companionUser }) => {
+const DialogBox = ({ messages, currentCompanion, selectedCompanionId, selfId }) => {
     const classes = useStyles();
+
+    if (selectedCompanionId === -1) {
+        return <div className={classes.root}></div>
+    }
 
     return (
         <div className={classes.root}>
             <div className={classes.header}>
                 <Avatar 
+                    src={currentCompanion.avatar}
                     className={classes.avatar}
                 />
                 <Typography 
                     variant="body1"
                     display="block"
                     className={classes.nickname}
-                >Nickname</Typography>
+                >{currentCompanion.nickname}</Typography>
             </div>
             <ListMessages 
                 messages={messages}
+                selfId={selfId}
+                currentCompanion={currentCompanion}
             />
             <MessageForm 
                 blockHeight={2}

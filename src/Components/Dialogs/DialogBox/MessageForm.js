@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useFormik } from 'formik';
-import { NavLink } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { TextField, IconButton } from '@material-ui/core';
@@ -44,7 +43,7 @@ const validationSchema = yup.object({
 })
 
 
-const MessageForm = ({  }) => {
+const MessageForm = () => {
     const classes = useStyles();
     const ws = useContext(WebSocketContext);
 

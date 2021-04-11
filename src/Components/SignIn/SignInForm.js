@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { Button, TextField, Typography } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 

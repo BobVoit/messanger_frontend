@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Container, Grid } from '@material-ui/core';
-import ChatIcon from '@material-ui/icons/Chat';
 import { withStyles } from '@material-ui/core/styles';
 
-import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 import DialogBox from './DialogBox/DialogBox';
 import Conversations from './Conversations/Conversations';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+import { setCompanion } from '../../redux/chatReducer';
+import { companionPT, messagesPT } from '../../propTypes';
+import { WebSocketContext } from '../WebSocket/WebSocket';
 
 
 const useStyles = theme => ({
@@ -27,8 +28,24 @@ const useStyles = theme => ({
 })
 
 class Dialogs extends Component {
+    static contextType = WebSocketContext;
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedCompanionId: -1,
+        }
+    }
+
+
+    selectCompanion = (companion) => {
+        const ws = this.context;
+        this.props.setCompanion(companion);
+        ws.getAllMessages(companion.id);
+        this.setState({ selectedCompanionId: companion.id });
+    }
+
     render() {
-        const { classes, activeUsers } = this.props;
+        const { classes, activeUsers, messages, selfId, currentCompanion } = this.props;
         return (
             <Container fixed className={classes.root}>
                 <Grid 
@@ -40,11 +57,18 @@ class Dialogs extends Component {
                     <Grid item sm={4} md={4}>
                         <Conversations
                             activeUsers={activeUsers}
+                            selectCompanion={this.selectCompanion}
+                            selectedCompanionId={this.state.selectedCompanionId}
                         />
                     </Grid>
 
                     <Grid item sm={8} md={8}>
-                        <DialogBox />
+                        <DialogBox 
+                            messages={messages}
+                            currentCompanion={currentCompanion}
+                            selectedCompanionId={this.state.selectedCompanionId}
+                            selfId={selfId}
+                        />
                     </Grid>
                 </Grid>
             </Container>
@@ -54,17 +78,23 @@ class Dialogs extends Component {
 
 Dialogs.propTypes = {
     activeUsers: PropTypes.array,
-
+    currentCompanion: companionPT,
+    setCompanion: PropTypes.func,
+    messages: messagesPT,
+    selfId: PropTypes.number
 }
 
 const mapStateToProps = (state) => ({
-    activeUsers: state.users.activeUsers
+    activeUsers: state.users.activeUsers,
+    currentCompanion: state.chat.currentCompanion,
+    messages: state.chat.messages,
+    selfId: state.auth.id
 })
 
 export default compose(
     withStyles(useStyles),
     withAuthRedirect,
     connect(mapStateToProps, {
-
+        setCompanion,
     })
 )(Dialogs);

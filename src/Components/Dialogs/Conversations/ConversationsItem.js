@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { ListItem, ListItemAvatar, Avatar, ListItemText, Badge } from '@material-ui/core';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 
 import { userPT } from '../../../propTypes';
 
@@ -35,18 +34,21 @@ const StyledBadge = withStyles((theme) => ({
   },
 }))(Badge);
 
-const useStyles = makeStyles((theme) => ({
 
-}))
+const ConversationsItem = ({ user, selectCompanion, isSelect }) => {
 
-const ConversationsItem = ({ user }) => {
-    const classes = useStyles();
+    const selectCurrentUser = () => {
+      selectCompanion(user);
+    }
+
     return (
         <ListItem
             button
+            onClick={selectCurrentUser}
+            selected={isSelect}
         >
             <ListItemAvatar>
-                {user.status == "online" ? <StyledBadge
+                {user.status === "online" ? <StyledBadge
                     anchorOrigin={
                         { vertical: 'bottom', horizontal: 'right',}
                     }

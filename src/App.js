@@ -13,7 +13,7 @@ import { Box, CssBaseline, CircularProgress  } from '@material-ui/core';
 import { theme } from './theme/createTheme';
 import { withStyles } from '@material-ui/core/styles';
 
-import WebSocketProvider, { WebSocketContext } from './Components/WebSocket/WebSocket';
+import WebSocketProvider from './Components/WebSocket/WebSocket';
 import { initializeApp } from './redux/appReducer';
 
 import Header from './Components/Header/Header';
@@ -43,6 +43,7 @@ class App extends Component {
     }
     this.drawerWidth = 300;
   }
+
 
   componentDidMount() {
     this.props.initializeApp();
