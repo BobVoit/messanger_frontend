@@ -20,6 +20,7 @@ export const authAPI = {
     }
 }
 
+
 export const userAPI = {
     getUserData(token) {
         return instance.get(`/users/getUserData/${token}`);
@@ -36,8 +37,12 @@ export const userAPI = {
     },
     getUserAboutText(token) {
         return instance.get(`/users/getAboutText/${token}`);
+    },
+    getSomeUsers(count, start) {
+        return instance.get(`/users/someUsers?start=${start}&count=${count}`);
     }
 }
+
 
 export const avatarAPI = {
     saveUserAvatar(token, avatar) {

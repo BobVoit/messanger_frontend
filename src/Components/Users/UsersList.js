@@ -1,12 +1,23 @@
 import React from 'react'
 
-import { List } from '@material-ui/core'
+import { List } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const ListUsers = () => {
+import UserItem from './UserItem';
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginRight: 'auto',
+        marginLeft: 'auto'
+    }
+}))
+
+const ListUsers = ({ users }) => {
+    const classes = useStyles();
     return (
-        <List>
-            
-        </List>
+        <div className={classes.root}>
+            {users.map(user => <UserItem key={user.id} user={user} />)}
+        </div>
     )
 }
 
