@@ -2,29 +2,29 @@ import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import UserItem from './UserItem';
+import FriendItem from './FriendItem';
 import UserCard from '../common/UserCard/UserCard';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         marginRight: 'auto',
-        marginLeft: 'auto'
+        marginLeft: 'auto',
+        maxWidth: 500,
     }
 }))
 
-const ListUsers = ({ users }) => {
+const FriendsList = ({ friends }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            {users.map(user => <UserCard 
-                isAction={true} 
-                key={user.id} 
-                user={user} 
-                actionText="Добавить в друзья"
+            {friends.map(friend => <UserCard 
+                isAction={false} 
+                key={friend.id} 
+                user={friend} 
             />)}
         </div>
     )
 }
 
 
-export default ListUsers;
+export default FriendsList;

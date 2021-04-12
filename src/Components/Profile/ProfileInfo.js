@@ -37,9 +37,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const ProfileInfo = ({ nickname, aboutText, avatar, saveUserAvatar, updateAboutText }) => {
+const ProfileInfo = ({ nickname, aboutText, avatar, saveUserAvatar, updateAboutText, id }) => {
     const classes = useStyles();
     const [openAvatarWindow, setOpenAvatarWindow] = useState(false);
+    const selfId = localStorage.getItem('userId');
+    console.log(!avatar && selfId == id);
+    console.log(avatar)
 
     const onAvatarSelected = (e) => {
       if (e.target.files.length) {
@@ -59,32 +62,45 @@ const ProfileInfo = ({ nickname, aboutText, avatar, saveUserAvatar, updateAboutT
     return (
       <Paper className={classes.paper}>
         <div className={classes.avatarWrapper}>
-          <Avatar 
-            onClick={avatar ? openAvatar : null} 
-            className={classes.avatar} 
-            src={avatar ? avatar : null}
-          >
-            {!avatar && (
-              <IconButton
-                component="label"
-              >
-                <AddAPhotoIcon />
-                <input 
-                  type="file" 
-                  hidden 
-                  onChange={onAvatarSelected}
-                />
-              </IconButton>
-            )}
-          </Avatar>
+          {selfId == id ? (
+            <Avatar 
+              onClick={avatar ? openAvatar : null} 
+              className={classes.avatar} 
+              src={avatar ? avatar : null}
+            >
+              { !avatar && (
+                <IconButton
+                  component="label"
+                >
+                  <AddAPhotoIcon />
+                  <input 
+                    type="file" 
+                    hidden 
+                    onChange={onAvatarSelected}
+                  />
+                </IconButton>
+              )}
+            </Avatar>
+          ) : (
+            <Avatar 
+              onClick={avatar ? openAvatar : null} 
+              className={classes.avatar} 
+              src={avatar ? avatar : null}
+            />
+          )}
         </div>
+
         <Divider orientation="vertical" flexItem className={classes.divider} />
+
         <div className={classes.infoWrapper}>
           <Typography variant="h5" gutterBottom>
             {nickname}
           </Typography>
+
           <Divider />
+
           <TextAboutUser 
+            isYourAcount={selfId !== selfId}
             aboutText={aboutText}
             updateAboutText={updateAboutText}
           />

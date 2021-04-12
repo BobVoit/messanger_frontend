@@ -40,6 +40,12 @@ export const userAPI = {
     },
     getSomeUsers(count, start) {
         return instance.get(`/users/someUsers?start=${start}&count=${count}`);
+    },
+    getAllFriends(token) {
+        return instance.get(`/users/getFriends/${token}`);
+    },
+    getUserProfile(userId) {
+        return instance.get(`/users/getProfile/${userId}`);
     }
 }
 

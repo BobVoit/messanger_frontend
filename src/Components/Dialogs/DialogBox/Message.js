@@ -32,7 +32,7 @@ const Message = ({ whoSend, text, isSelf }) => {
                 display="block"
                 variant="subtitle2"
                 className={classes.whoSend}
-            >{whoSend}</Typography>
+            >{whoSend}:</Typography>
             <Typography
                 display="block"
                 variant="body1"

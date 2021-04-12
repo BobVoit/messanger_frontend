@@ -11,6 +11,7 @@ const SET_NICKNAME = 'SET_NICKNAME';
 const SET_ABOUT_TEXT = 'SET_ABOUT_TEXT';
 const SET_ERROR = 'SET_ERROR';
 const CLEAR_ERROR = 'CLEAR_ERROR';
+const CLEAR_USER_DATA = 'CLEAR_USER_DATA';
 
 
 // initial state
@@ -88,6 +89,20 @@ const authReducer = (state = initialState, action) => {
                 error: null
             }
         }
+        case CLEAR_USER_DATA: {
+            return {
+                ...state,
+                id: null,
+                login: null,
+                password: null,
+                nickname: null,
+                isAuth: false,
+                status: null,
+                token: null,
+                aboutText: null,
+                avatar: null,
+            }
+        }
         default:
             return state;
     }
@@ -95,7 +110,7 @@ const authReducer = (state = initialState, action) => {
 
 // action creators
 
-export const setUserData = (id, login, password, nickname, isAuth, status, token, aboutText, avatar) => {
+export const setUserData = ({ id, login, password, nickname, isAuth, status, token, aboutText, avatar }) => {
     return {
         type: SET_USER_DATA,
         id, login, password, nickname, isAuth, status, token, aboutText, avatar
@@ -130,6 +145,10 @@ export const setAboutText = (aboutText) => ({
 export const setError = (error) => ({
     type: SET_ERROR,
     error
+})
+
+export const clearUserData = () => ({
+    type: CLEAR_USER_DATA
 })
 
 export const clearError = () => ({
@@ -168,8 +187,9 @@ export const getUserData = (token) => async (dispatch) => {
     let response = await userAPI.getUserData(token);
     const { result, data } = response.data;
     if (result === 'ok' && data) {
-        const { id, login, password, nickname, status, token, aboutText, avatar } = data;
-        dispatch(setUserData(id, login, password, nickname, true, status, token, aboutText, avatar));
+        localStorage.setItem('userId', data.id);
+        const isAuth = true;
+        dispatch(setUserData({ ...data, isAuth,  }));
     } else {
         localStorage.removeItem('token');
     }
@@ -181,7 +201,8 @@ export const logout = () => async (dispatch) => {
     const { result, data } = response.data;
     if (result === 'ok' && data) {
         localStorage.removeItem('token');
-        dispatch(setUserData(null, null, null, null, false, null, null, null, null));
+        localStorage.removeItem('userId');
+        dispatch(clearUserData());
     }
 }
 

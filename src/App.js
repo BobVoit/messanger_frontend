@@ -15,6 +15,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import WebSocketProvider from './Components/WebSocket/WebSocket';
 import { initializeApp } from './redux/appReducer';
+import Preloader from './Components/common/Preloader/Preloader';
 
 import Header from './Components/Header/Header';
 import MenuNavigarion from './Components/MenuNavigation/MenuNavigarion';
@@ -62,7 +63,7 @@ class App extends Component {
   render() {
     
     if (!this.props.initialized) {
-      return <CircularProgress color="secondary" size={50} />;
+      return <Preloader size={70} />
     }
 
 
@@ -88,7 +89,7 @@ class App extends Component {
             <Box className={classes.main}>
               <Route path="/signup" render={() => <SignUp />} />
               <Route path="/signin" render={() => <SignIn />} />
-              <Route path="/profile" render={() => <Profile />} />
+              <Route path="/profile/:userId?" render={() => <Profile />} />
               <Route path="/friends" render={() => <Friends />} />
               <Route path="/users" render={() => <Users />} />
               <Route path="/dialogs" render={() => <Dialogs />} />
