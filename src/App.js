@@ -9,24 +9,28 @@ import { navigationLinks } from './common';
 import store from './redux/store';
 
 import { ThemeProvider } from '@material-ui/styles';
-import { Box, CssBaseline, CircularProgress  } from '@material-ui/core';
+import { Box, CssBaseline } from '@material-ui/core';
 import { theme } from './theme/createTheme';
 import { withStyles } from '@material-ui/core/styles';
 
 import WebSocketProvider from './Components/WebSocket/WebSocket';
 import { initializeApp } from './redux/appReducer';
 import Preloader from './Components/common/Preloader/Preloader';
+import { withSuspense } from './hoc/withSuspense';
 
 import Header from './Components/Header/Header';
 import MenuNavigarion from './Components/MenuNavigation/MenuNavigarion';
 import SignUp from './Components/SignUp/SignUp';
 import SignIn from './Components/SignIn/SignIn';
 import Profile from './Components/Profile/Profile';
-import Friends from './Components/Friends/Friends';
-import Users from './Components/Users/Users';
+// import Friends from './Components/Friends/Friends';
+// import Users from './Components/Users/Users';
 import Dialogs from './Components/Dialogs/Dialogs';
-import Settings from './Components/Settings/Settings';
+// import Settings from './Components/Settings/Settings';
 
+const Users = React.lazy(() => import('./Components/Users/Users'));
+const Friends = React.lazy(() => import('./Components/Friends/Friends'));
+const Settings = React.lazy(() => import('./Components/Settings/Settings'));
 
 
 const useStyles = theme => ({
@@ -90,10 +94,10 @@ class App extends Component {
               <Route path="/signup" render={() => <SignUp />} />
               <Route path="/signin" render={() => <SignIn />} />
               <Route path="/profile/:userId?" render={() => <Profile />} />
-              <Route path="/friends" render={() => <Friends />} />
-              <Route path="/users" render={() => <Users />} />
               <Route path="/dialogs" render={() => <Dialogs />} />
-              <Route path="/settings" render={() => <Settings />} />
+              <Route path="/friends" render={withSuspense(Friends)} />
+              <Route path="/users" render={withSuspense(Users)} />
+              <Route path="/settings" render={withSuspense(Settings)} />
             </Box>
           </div>
         </ThemeProvider>

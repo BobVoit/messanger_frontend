@@ -1,4 +1,4 @@
-import { userAPI } from '../api/api';
+import { userAPI, friendsAPI } from '../api/api';
 
 const SET_ALL_ACTIVE_USERS = 'SET_ALL_ACTIVE_USERS';
 const SET_NEW_ACTIVE_USER = 'SET_NEW_ACTIVE_USER';
@@ -9,7 +9,8 @@ const TOGGLE_FRIENDS_IS_FETCHING = 'TOGGLE_FRIENDS_IS_FETCHING';
 const TOGGLE_USERS_IS_FETCHING = 'TOGGLE_USERS_IS_FETCHING';
 const SET_PROFILE = 'SET_PROFILE';
 const TOGGLE_CURRENT_PROFILE = 'TOGGLE_CURRENT_PROFILE';
-const TOGGLE_PROFILE_IS_DOWNLOAD = 'TOGGLE_PROFILE_IS_DOWNLOAD';
+const REMOVE_USER = 'REMOVE_USER';
+
 
 // initialState
 let initialState = {
@@ -19,9 +20,7 @@ let initialState = {
     friends: [],
     friendsIsFetching: false,
     profile: null,
-    profileIsDownload: false,
     isYourCurrentProfile: true,
-    
 }
 
 
@@ -82,12 +81,12 @@ const usersReducer = (state = initialState, action) => {
                 isYourCurrentProfile: action.value
             }
         }
-        case TOGGLE_PROFILE_IS_DOWNLOAD: {
+        case REMOVE_USER: {
             return {
                 ...state,
-                profileIsDownload: action.value
+                users: state.users.filter(user => user.id !== action.userId)
             }
-        } 
+        }
         default:
             return state;
     }
@@ -138,14 +137,14 @@ export const toggleCurrentAcount = (value) => ({
     value
 })
 
-export const toggleProfileIsDownload = (value) => ({
-    type: TOGGLE_PROFILE_IS_DOWNLOAD,
-    value
+export const removeUser = (userId) => ({
+    type: REMOVE_USER,
+    userId
 })
 
 
-export const getUsers = (count, start) => async (dispatch) => {
-    const response = await userAPI.getSomeUsers(count, start);
+export const getUsers = (userId, count, start) => async (dispatch) => {
+    const response = await userAPI.getSomeUsers(userId, count, start);
     dispatch(toggleUsersIsFetching(true));
     const { result, data } = response.data;
     if (result === 'ok' && data instanceof Array) {
@@ -157,7 +156,7 @@ export const getUsers = (count, start) => async (dispatch) => {
 export const getFriends = () => async (dispatch) => {
     const token = localStorage.getItem('token');
     dispatch(toggleFriendsIsFetching(true));
-    const response = await userAPI.getAllFriends(token);
+    const response = await friendsAPI.getAllFriends(token);
     const { result, data} = response.data;
     if (result === 'ok' && data instanceof Array) {
         dispatch(toggleFriendsIsFetching(false));
@@ -165,13 +164,26 @@ export const getFriends = () => async (dispatch) => {
     }
 }
 
-export const getProfile = userId => async dispatch => {
+export const getProfile = (userId) => async (dispatch) => {
     const response = await userAPI.getUserProfile(userId);
-    dispatch(toggleProfileIsDownload(true));
     const { result, data } = response.data;
     if (result === 'ok' && data) {
-        dispatch(toggleProfileIsDownload(false));
         dispatch(setProfile(data));
+    }
+}
+
+export const requestInFriends = (fromId, toId) => async (dispatch) => {
+    const response = await friendsAPI.requestInFriends(fromId, toId);
+    const { result, data } = response.data;
+    if (result === 'ok' && data) {
+        dispatch(removeUser(toId));
+    }
+}
+
+export const deleteRequestInFriends = (id) => async (dispatch) => {
+    const response = await friendsAPI.deleteRequestInFriends(id);
+    const { result, data } = response.data;
+    if (result === 'ok' && data) {
     }
 }
 

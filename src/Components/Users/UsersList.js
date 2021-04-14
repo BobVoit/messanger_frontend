@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const ListUsers = ({ users }) => {
+const ListUsers = ({ users, requestInFriends }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -21,6 +21,8 @@ const ListUsers = ({ users }) => {
                 key={user.id} 
                 user={user} 
                 actionText="Добавить в друзья"
+                actionButtonHandleClick={requestInFriends}
+                snackbarText={`Заявка в друзья ${user.nickname} отправлена`}
             />)}
         </div>
     )

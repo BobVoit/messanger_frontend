@@ -4,11 +4,11 @@ import { withStyles } from '@material-ui/core/styles';
 
 
 const useStyles = theme => ({
-    aboutText: {
+    aboutText: props => ({
         textIndent: theme.spacing(2),
-        cursor: 'pointer',
+        cursor: props.isYourAcount ? 'pointer' : 'default',
         userSelect: 'none',
-    },
+    }),
     emptyAboutText: {
         fontSize: 12,    
     }
@@ -40,7 +40,7 @@ class TextAboutUser extends Component {
     }
     
     render() {
-        const { aboutText, classes } = this.props;
+        const { aboutText, classes, isYourAcount } = this.props;
         return (
             <div>
                 <Typography variant="subtitle2">Обо мне:</Typography>
@@ -50,7 +50,7 @@ class TextAboutUser extends Component {
                         component="p"
                         variant="body2"
                         className={classes.aboutText}
-                        onDoubleClick={this.activateEditMode}
+                        onDoubleClick={isYourAcount ? this.activateEditMode : null}
                     >
                         {aboutText}
                     </Typography>
@@ -61,12 +61,12 @@ class TextAboutUser extends Component {
                         component="p"
                         variant="body2"
                         className={classes.emptyAboutText + " " + classes.aboutText}
-                        onDoubleClick={this.activateEditMode}
+                        onDoubleClick={isYourAcount ? this.activateEditMode : null}
                     >
-                        Установите информацию о себе
+                        {isYourAcount && 'Установите информацию о себе'}
                     </Typography>
                 }
-                { this.state.editMode && 
+                { ( this.state.editMode && isYourAcount ) && 
                     <OutlinedInput 
                         onChange={this.onAboutTextChange}
                         autoFocus={true} 

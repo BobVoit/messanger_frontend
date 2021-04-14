@@ -38,14 +38,23 @@ export const userAPI = {
     getUserAboutText(token) {
         return instance.get(`/users/getAboutText/${token}`);
     },
-    getSomeUsers(count, start) {
-        return instance.get(`/users/someUsers?start=${start}&count=${count}`);
-    },
-    getAllFriends(token) {
-        return instance.get(`/users/getFriends/${token}`);
+    getSomeUsers(userId, count, start) {
+        return instance.get(`/users/someUsers?start=${start}&count=${count}&userId=${userId}`);
     },
     getUserProfile(userId) {
         return instance.get(`/users/getProfile/${userId}`);
+    }
+}
+
+export const friendsAPI = {
+    getAllFriends(token) {
+        return instance.get(`/friends/getFriends/${token}`);
+    },
+    requestInFriends(fromId, toId) {
+        return instance.get(`/friends/requestInFriends?fromId=${fromId}&toId=${toId}`)
+    },
+    deleteRequestInFriends(id) {
+        return instance.get(`/friends/deleteRequestInFriends/${id}`);
     }
 }
 

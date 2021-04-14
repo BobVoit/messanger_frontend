@@ -41,8 +41,7 @@ const ProfileInfo = ({ nickname, aboutText, avatar, saveUserAvatar, updateAboutT
     const classes = useStyles();
     const [openAvatarWindow, setOpenAvatarWindow] = useState(false);
     const selfId = localStorage.getItem('userId');
-    console.log(!avatar && selfId == id);
-    console.log(avatar)
+    const isYourAcount = selfId == id;
 
     const onAvatarSelected = (e) => {
       if (e.target.files.length) {
@@ -100,9 +99,9 @@ const ProfileInfo = ({ nickname, aboutText, avatar, saveUserAvatar, updateAboutT
           <Divider />
 
           <TextAboutUser 
-            isYourAcount={selfId !== selfId}
+            isYourAcount={isYourAcount}
             aboutText={aboutText}
-            updateAboutText={updateAboutText}
+            updateAboutText={isYourAcount ? updateAboutText : null}
           />
         </div>
 

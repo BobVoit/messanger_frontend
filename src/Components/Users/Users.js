@@ -11,7 +11,7 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 import UsersList from './UsersList';
-import { getUsers } from '../../redux/usersReducer';
+import { getUsers, requestInFriends } from '../../redux/usersReducer';
 
 
 const useStyles = theme => ({
@@ -31,12 +31,13 @@ class Users extends Component {
     }
 
     componentDidMount() {
-        this.props.getUsers(20, 0);
+        const selfId = localStorage.getItem('userId');
+        this.props.getUsers(selfId, 20, 0);
     }
 
 
     render() {
-        const { classes, users } = this.props;
+        const { classes, users, requestInFriends } = this.props;
         return (
             <div>
                 <Container fixed className={classes.root}>
@@ -49,6 +50,7 @@ class Users extends Component {
                 />
                 <UsersList 
                     users={users}
+                    requestInFriends={requestInFriends}
                 />
             </Container>
             </div>
@@ -74,7 +76,8 @@ const mapStateToProps = (state) => ({
 export default compose(
     withStyles(useStyles),
     connect(mapStateToProps, {
-        getUsers
+        getUsers,
+        requestInFriends
     }),
     withRouter,
     withAuthRedirect

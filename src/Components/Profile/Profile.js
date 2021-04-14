@@ -10,7 +10,7 @@ import PersonIcon from '@material-ui/icons/Person';
 
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import { saveUserAvatar, updateAboutText } from '../../redux/authReducer';
-import { getProfile, toggleCurrentAcount } from '../../redux/usersReducer';
+import { getProfile, toggleCurrentAcount, setProfile } from '../../redux/usersReducer';
 import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 import ProfileInfo from './ProfileInfo';
 import Preloader from '../common/Preloader/Preloader';
@@ -28,62 +28,65 @@ const useStyles = theme => ({
 class Profile extends Component {
 
     componentDidMount() {
-        let userId = this.props.match.params.userId;    
-        console.log(userId);
+        let userId = this.props.match.params.userId;
         if (!userId) {
-            this.props.toggleCurrentAcount(true);
+            const { id, nickname, avatar, status, aboutText } = this.props;
+            this.props.setProfile({ id, nickname, avatar, status, aboutText });
             if (!this.props.id) {
                 this.props.history.push("/signin");
             }
         } else {
-            this.props.toggleCurrentAcount(false);
             this.props.getProfile(userId);
         }
     }
 
-    render() {
-        const { classes, nickname, aboutText, saveUserAvatar,
-            avatar, updateAboutText, id, status, profile, isYourCurrentProfile } = this.props;
-        console.log(profile);
-        console.log('isYourCurrentProfile', isYourCurrentProfile);  
-        let person = null;
-        if (isYourCurrentProfile) {
-            person = {
-                id, nickname, avatar, status, aboutText  
-            }
-        } else {
-            person = {
-                id: profile.id,
-                nickname: profile.nickname,
-                avatar: profile.avatar,
-                aboutText: profile.aboutText,
-                status: profile.status
+    componentWillUnmount() {
+        this.props.setProfile(null);
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.profile) {
+            if (this.props.match.params.userId != prevProps.match.params.userId) {
+                this.props.setProfile(null);
+                let userId = this.props.match.params.userId;
+                if (!userId) {
+                    const { id, nickname, avatar, status, aboutText } = this.props;
+                    this.props.setProfile({ id, nickname, avatar, status, aboutText });
+                    if (!this.props.id) {
+                        this.props.history.push("/signin");
+                    }
+                } else {
+                    this.props.getProfile(userId);
+                }
             }
         }
+    }
+
+    render() {
+        const { classes, saveUserAvatar, updateAboutText, profile, aboutText} = this.props;
+        if (!profile) {
+            return <Preloader />
+        }
+
+        const textAboutUser = localStorage.getItem('userId') == profile.id ? aboutText : profile.aboutText;
 
         return (
             <Container fixed className={classes.root}>
-                {/* {!profileIsDownload ? (
-                    <> */}
-                        <TitleTemplate 
-                            icon={<PersonIcon 
-                                color="secondary"
-                                className={classes.titleIcon}
-                            />}
-                            title="Профиль"
-                        />
-                        <ProfileInfo 
-                            nickname={person.nickname}
-                            avatar={person.avatar}
-                            aboutText={person.aboutText}
-                            saveUserAvatar={saveUserAvatar}
-                            updateAboutText={updateAboutText}
-                            id={person.id}
-                        />
-                    {/* </>
-                ) : (
-                    <Preloader />
-                )} */}
+                <TitleTemplate 
+                    icon={<PersonIcon 
+                        color="secondary"
+                        className={classes.titleIcon}
+                    />}
+                    title="Профиль"
+                />
+                <ProfileInfo 
+                    nickname={profile.nickname}
+                    avatar={profile.avatar}
+                    aboutText={textAboutUser}
+                    saveUserAvatar={saveUserAvatar}
+                    updateAboutText={updateAboutText}
+                    id={profile.id}
+                />
             </Container>
         )
     }
@@ -128,7 +131,8 @@ export default compose(
         saveUserAvatar,
         updateAboutText,
         getProfile,
-        toggleCurrentAcount
+        toggleCurrentAcount,
+        setProfile
     }), 
     withRouter,
     withAuthRedirect,

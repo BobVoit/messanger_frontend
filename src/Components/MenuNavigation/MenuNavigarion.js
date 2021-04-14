@@ -3,7 +3,7 @@ import React from 'react';
 import ListNavigation from './ListNavigation';
 
 import { makeStyles, useTheme  } from '@material-ui/core/styles';  
-import { Drawer, IconButton, Divider } from '@material-ui/core';
+import { Drawer, IconButton, Divider, Typography } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
@@ -16,13 +16,22 @@ const useStyles = makeStyles((theme) => ({
       drawerPaper: {
         width: 300,
       },
+      // header: {
+      //   display: 'flex',
+      //   justifyContent: 'space-between'
+      // },
       drawerHeader: {
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'space-between',
         padding: theme.spacing(0, 1),
         // necessary for content to be below app bar
         ...theme.mixins.toolbar,
-        justifyContent: 'flex-end',
+        // justifyContent: 'flex-end',
+      },
+      headerTitle: {
+        marginLeft: theme.spacing(2),
+        color: theme.palette.primary.dark
       },
       content: {
         flexGrow: 1,
@@ -56,6 +65,7 @@ const MenuNavigarion = ({ handleDrawerClose, drawerOpen, navigationLinks }) => {
             }}
         >
             <div className={classes.drawerHeader}>
+                <Typography variant="h5" display="block" className={classes.headerTitle}>Меню</Typography>
                 <IconButton onClick={handleDrawerClose}>
                     {theme.direction === "ltr" ? (
                     <ChevronLeftIcon />
