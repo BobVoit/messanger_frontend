@@ -17,7 +17,7 @@ import { getUsers, requestInFriends } from '../../redux/usersReducer';
 const useStyles = theme => ({
     root: {
         marginTop: theme.spacing(20),
-        width: 500
+        maxWidth: 500
     },
     titleIcon: {
         width: theme.spacing(6),

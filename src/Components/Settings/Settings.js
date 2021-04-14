@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Container, Paper, List } from '@material-ui/core';
+import { Container, Paper, List, Fade } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import SettingsIcon from '@material-ui/icons/Settings';
 import FaceIcon from '@material-ui/icons/Face';
@@ -101,36 +101,38 @@ class Settings extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <Container 
-                fixed 
-                className={classes.root}
-            >
-                <TitleTemplate 
-                    icon={<SettingsIcon   
-                        color="secondary"
-                        className={classes.titleIcon}
-                    />}
-                    title="Настройки"
-                />
-                <Paper className={classes.paper}>
-                    <div className={classes.list}>
-                        <List
-                        >
-                            {this.items.map(item => <SettingsItem 
-                                isCurrent={this.state.currentItem === item.id ? true : false}
-                                key={item.id} 
-                                id={item.id}
-                                icon={item.icon} 
-                                title={item.title} 
-                                selectItem={this.setSelectedItem}
-                            />)}
-                        </List>
-                    </div>
-                    <div className={classes.editBlock}>
-                        {this.renderCurrentForm(this.state.currentItem)}
-                    </div>
-                </Paper>
-            </Container>
+            <Fade in={true}>
+                <Container 
+                    fixed 
+                    className={classes.root}
+                >
+                    <TitleTemplate 
+                        icon={<SettingsIcon   
+                            color="secondary"
+                            className={classes.titleIcon}
+                        />}
+                        title="Настройки"
+                    />
+                    <Paper className={classes.paper}>
+                        <div className={classes.list}>
+                            <List
+                            >
+                                {this.items.map(item => <SettingsItem 
+                                    isCurrent={this.state.currentItem === item.id ? true : false}
+                                    key={item.id} 
+                                    id={item.id}
+                                    icon={item.icon} 
+                                    title={item.title} 
+                                    selectItem={this.setSelectedItem}
+                                />)}
+                            </List>
+                        </div>
+                        <div className={classes.editBlock}>
+                            {this.renderCurrentForm(this.state.currentItem)}
+                        </div>
+                    </Paper>
+                </Container>
+            </Fade>
         )
     }
 }

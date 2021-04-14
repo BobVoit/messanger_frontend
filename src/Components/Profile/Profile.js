@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 
-import { Container, } from '@material-ui/core';
+import { Container, Fade } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import PersonIcon from '@material-ui/icons/Person';
 
@@ -71,23 +71,25 @@ class Profile extends Component {
         const textAboutUser = localStorage.getItem('userId') == profile.id ? aboutText : profile.aboutText;
 
         return (
-            <Container fixed className={classes.root}>
-                <TitleTemplate 
-                    icon={<PersonIcon 
-                        color="secondary"
-                        className={classes.titleIcon}
-                    />}
-                    title="Профиль"
-                />
-                <ProfileInfo 
-                    nickname={profile.nickname}
-                    avatar={profile.avatar}
-                    aboutText={textAboutUser}
-                    saveUserAvatar={saveUserAvatar}
-                    updateAboutText={updateAboutText}
-                    id={profile.id}
-                />
-            </Container>
+            <Fade in={true}>
+                <Container fixed className={classes.root}>
+                    <TitleTemplate 
+                        icon={<PersonIcon 
+                            color="secondary"
+                            className={classes.titleIcon}
+                        />}
+                        title="Профиль"
+                    />
+                    <ProfileInfo 
+                        nickname={profile.nickname}
+                        avatar={profile.avatar}
+                        aboutText={textAboutUser}
+                        saveUserAvatar={saveUserAvatar}
+                        updateAboutText={updateAboutText}
+                        id={profile.id}
+                    />
+                </Container>
+            </Fade>
         )
     }
 }

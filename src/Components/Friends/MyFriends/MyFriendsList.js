@@ -2,8 +2,7 @@ import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import FriendItem from './FriendItem';
-import UserCard from '../common/UserCard/UserCard';
+import UserCard from '../../common/UserCard/UserCard';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -13,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const FriendsList = ({ friends }) => {
+const MyFriendsList = ({ friends }) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -27,4 +26,4 @@ const FriendsList = ({ friends }) => {
 }
 
 
-export default FriendsList;
+export default MyFriendsList;

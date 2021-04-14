@@ -3,7 +3,7 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { Container, Grid } from '@material-ui/core';
+import { Container, Grid, Fade } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 import DialogBox from './DialogBox/DialogBox';
@@ -47,31 +47,33 @@ class Dialogs extends Component {
     render() {
         const { classes, activeUsers, messages, selfId, currentCompanion } = this.props;
         return (
-            <Container fixed className={classes.root}>
-                <Grid 
-                    container 
-                    className={classes.gridContainer}
-                    direction="row"
-                    spacing={2}
-                >
-                    <Grid item sm={4} md={4}>
-                        <Conversations
-                            activeUsers={activeUsers}
-                            selectCompanion={this.selectCompanion}
-                            selectedCompanionId={this.state.selectedCompanionId}
-                        />
-                    </Grid>
+            <Fade in={true}>
+                <Container fixed className={classes.root}>
+                    <Grid 
+                        container 
+                        className={classes.gridContainer}
+                        direction="row"
+                        spacing={2}
+                    >
+                        <Grid item sm={4} md={4}>
+                            <Conversations
+                                activeUsers={activeUsers}
+                                selectCompanion={this.selectCompanion}
+                                selectedCompanionId={this.state.selectedCompanionId}
+                            />
+                        </Grid>
 
-                    <Grid item sm={8} md={8}>
-                        <DialogBox 
-                            messages={messages}
-                            currentCompanion={currentCompanion}
-                            selectedCompanionId={this.state.selectedCompanionId}
-                            selfId={selfId}
-                        />
+                        <Grid item sm={8} md={8}>
+                            <DialogBox 
+                                messages={messages}
+                                currentCompanion={currentCompanion}
+                                selectedCompanionId={this.state.selectedCompanionId}
+                                selfId={selfId}
+                            />
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Container>
+                </Container>
+            </Fade>
         )
     }
 }

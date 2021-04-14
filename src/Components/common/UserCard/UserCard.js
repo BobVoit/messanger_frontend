@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Avatar, Typography, Tooltip, IconButton } from '@material-ui/core';
+import { Paper, Avatar, Typography, Tooltip, IconButton, Fade } from '@material-ui/core';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 import AddIcon from '@material-ui/icons/Add';
 import SuccerssSnackbar from '../Snackbars/SuccerssSnackbar';
@@ -22,6 +23,11 @@ const useStyles = makeStyles((theme) => ({
         height: theme.spacing(8),
         width: theme.spacing(8),
     },
+    nickname: {
+        cursor: 'pointer',
+        textDecoration: 'none',
+        color: theme.palette.text.primary
+    },
     infoWrapper: {
         flexBasis: '70%'
     },
@@ -30,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandleClick }) => {
+const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandleClick, actionIcon }) => {
     const classes = useStyles();
     const [openSnackBar, setOpenSnakeBar] = useState(false);
     const selfId = localStorage.getItem('userId');
@@ -52,50 +58,57 @@ const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandle
     }
 
     return (
-        <Paper
-            className={classes.root}
-        >
-            <div className={classes.avatarWrapper}>
-                <Avatar 
-                    className={classes.avatar}
-                    src={user.avatar || null}
-                    component={NavLink}
-                    to={`/profile/${user.id}`}
-                />
-            </div>
-            <div className={classes.infoWrapper}>
-                <Typography>{user.nickname}</Typography>
-            </div>
-            {isAction && <div className={classes.actionWrapper}>
-                {actionText ? (
-                    <Tooltip title={actionText}>
+        <Fade in={true}>
+            <Paper
+                className={classes.root}
+            >
+                <div className={classes.avatarWrapper}>
+                    <Avatar 
+                        className={classes.avatar}
+                        src={user.avatar || null}
+                        component={NavLink}
+                        to={`/profile/${user.id}`}
+                    />
+                </div>
+                <div className={classes.infoWrapper}>
+                    <Typography
+                        className={classes.nickname}
+                        component={NavLink}
+                        to={`/profile/${user.id}`}
+                    >{user.nickname}</Typography>
+                </div>
+                {isAction && <div className={classes.actionWrapper}>
+                    {actionText ? (
+                        <Tooltip title={actionText}>
+                            <IconButton
+                                color="primary"
+                                onClick={sendReqestInFriedns}
+                            >
+                                {actionIcon || <AddIcon fontSize="large" /> }
+                            </IconButton>
+                        </Tooltip>
+                    ) : (
                         <IconButton
                             color="primary"
                             onClick={sendReqestInFriedns}
                         >
-                            <AddIcon fontSize="large" />
+                            {actionIcon || <AddIcon fontSize="large" /> }
                         </IconButton>
-                    </Tooltip>
-                ) : (
-                    <IconButton
-                        color="primary"
-                        onClick={sendReqestInFriedns}
-                    >
-                        <AddIcon fontSize="large" />
-                    </IconButton>
-                )
-                }
-            </div>}
-            
-            {/* Всплывающее окно об успешности операции */}
-            <SuccerssSnackbar 
-                open={openSnackBar}
-                handleClose={handleSnackBarClose}
-                message={snackbarText}
-                duration={2000}
-            />
+                    )
+                    }
+                    
+                </div>}
+                
+                {/* Всплывающее окно об успешности операции */}
+                <SuccerssSnackbar 
+                    open={openSnackBar}
+                    handleClose={handleSnackBarClose}
+                    message={snackbarText}
+                    duration={2000}
+                />
 
-        </Paper>
+            </Paper>
+        </Fade>
 
     )
 }

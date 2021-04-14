@@ -43,7 +43,7 @@ export const userAPI = {
     },
     getUserProfile(userId) {
         return instance.get(`/users/getProfile/${userId}`);
-    }
+    },
 }
 
 export const friendsAPI = {
@@ -55,6 +55,12 @@ export const friendsAPI = {
     },
     deleteRequestInFriends(id) {
         return instance.get(`/friends/deleteRequestInFriends/${id}`);
+    },
+    getRequestsInFriends(userId) {
+        return instance.get(`/friends/reqestsInFriends/${userId}`);
+    },
+    addInFriends(fromId, toId) {
+        return instance.get(`/friends/addInFriends?fromId=${fromId}&toId=${toId}`)
     }
 }
 
