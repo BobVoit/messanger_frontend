@@ -12,6 +12,7 @@ import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 import TitleTemplate from '../common/TitleTemplate/TitleTemplate';
 import UsersList from './UsersList';
 import { getUsers, requestInFriends } from '../../redux/usersReducer';
+import Preloader from '../common/Preloader/Preloader';
 
 
 const useStyles = theme => ({
@@ -37,7 +38,13 @@ class Users extends Component {
 
 
     render() {
-        const { classes, users, requestInFriends } = this.props;
+        const { classes, users, requestInFriends, usersIsFetching } = this.props;
+        console.log(usersIsFetching);
+
+        if (usersIsFetching) {
+            return <Preloader />
+        }
+        
         return (
             <div>
                 <Container fixed className={classes.root}>
@@ -70,7 +77,8 @@ Users.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-    users: state.users.users
+    users: state.users.users,
+    usersIsFetching: state.users.usersIsFetching
 })
 
 export default compose(

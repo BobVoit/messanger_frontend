@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Container, List } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import UserCard from '../../common/UserCard/UserCard';
+import RequestsFriendsItem from './RequestsFriendsItem';
 
 import Preloader from '../../common/Preloader/Preloader';
 
@@ -29,21 +30,25 @@ class RequestsInFriends extends Component {
         this.props.getRequestsInFriends(selfId);
     }
 
+
     render() {
         console.log(this.props)
-        const { classes, requestsInFriendsIsFetching, requestsInFriends } = this.props;
+        const { classes, requestsInFriendsIsFetching, requestsInFriends, addInFriends } = this.props;
         if (requestsInFriendsIsFetching) {
             return <Preloader />
         }
+        console.log(requestsInFriends);
         return (
             <div>
                 <Container fixed className={classes.root}>
                     <List className={classes.list}>
-                        {requestsInFriends.map(user => <UserCard 
+                        {requestsInFriends.map(user => <RequestsFriendsItem 
                             actionText="Добавить в друзья"
                             snackbarText={`${user.nickname} добавлен в друзья`}
                             isAction={true}
+                            addInFriends={addInFriends}
                             user={user}
+                            key={user.id}
                         />)}
                     </List>
                 </Container>

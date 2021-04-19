@@ -3,11 +3,10 @@ import { NavLink } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Avatar, Typography, Tooltip, IconButton, Fade } from '@material-ui/core';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import AddIcon from '@material-ui/icons/Add';
 
-import SuccerssSnackbar from '../Snackbars/SuccerssSnackbar';
-import UserAvatar from '../UserAvatar';
+import SuccerssSnackbar from '../../common/Snackbars/SuccerssSnackbar';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,10 +33,13 @@ const useStyles = makeStyles((theme) => ({
     },
     actionWrapper: {
         flexBasis: '10%'
+    },
+    succersAddInFriends: {
+        color: theme.palette.success.main
     }
 }))
 
-const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandleClick, actionIcon }) => {
+const RequestsFriendsItem = ({ user, isAction, actionText, snackbarText, addInFriends, actionIcon }) => {
     const classes = useStyles();
     const [openSnackBar, setOpenSnakeBar] = useState(false);
     const selfId = localStorage.getItem('userId');
@@ -54,8 +56,19 @@ const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandle
     };
 
     const handleClick = () => {
-        actionButtonHandleClick(selfId, user.id);
+        addInFriends(user.id);
         handleSnackBarClick();
+    }
+
+    const actionButton = () => {
+        return !user.isAdd ? (<IconButton
+            color="primary" 
+            onClick={handleClick}
+        >
+            {actionIcon || <AddIcon fontSize="large" /> }
+        </IconButton>
+        )
+        : <CheckCircleIcon className={classes.succersAddInFriends} />
     }
 
     return (
@@ -64,11 +77,9 @@ const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandle
                 className={classes.root}
             >
                 <div className={classes.avatarWrapper}>
-                    <UserAvatar 
-                        avatarClasses={classes.avatar}
-                        avatar={user.avatar || null}
-                        nickname={user.nickname}
-                        status={user.status}
+                    <Avatar 
+                        className={classes.avatar}
+                        src={user.avatar || null}
                         component={NavLink}
                         to={`/profile/${user.id}`}
                     />
@@ -83,21 +94,9 @@ const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandle
                 {isAction && <div className={classes.actionWrapper}>
                     {actionText ? (
                         <Tooltip title={actionText}>
-                            <IconButton
-                                color="primary"
-                                onClick={handleClick}
-                            >
-                                {actionIcon || <AddIcon fontSize="large" /> }
-                            </IconButton>
+                            {actionButton()}
                         </Tooltip>
-                    ) : (
-                        <IconButton
-                            color="primary"
-                            onClick={handleClick}
-                        >
-                            {actionIcon || <AddIcon fontSize="large" /> }
-                        </IconButton>
-                    )
+                    ) : actionButton()
                     }
                     
                 </div>}
@@ -116,4 +115,4 @@ const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandle
     )
 }
 
-export default UserCard;
+export default RequestsFriendsItem;

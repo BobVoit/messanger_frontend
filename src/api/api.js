@@ -59,7 +59,7 @@ export const friendsAPI = {
     getRequestsInFriends(userId) {
         return instance.get(`/friends/reqestsInFriends/${userId}`);
     },
-    addInFriends(fromId, toId) {
+    addInFriends(toId, fromId) {
         return instance.get(`/friends/addInFriends?fromId=${fromId}&toId=${toId}`)
     }
 }

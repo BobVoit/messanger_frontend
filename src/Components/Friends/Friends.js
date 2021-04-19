@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import MyFriends from './MyFriends/MyFriends';
 import RequestsInFriends from './RequestsInFriends/RequestsInFriends';
-import { getFriends, getRequestsInFriends } from '../../redux/usersReducer';
+import { getFriends, getRequestsInFriends, addInFriends } from '../../redux/usersReducer';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 
 
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Friends = ({ friends, friendsIsFetching, getFriends, getRequestsInFriends,
-  requestsInFriends, requestsInFriendsIsFetching })  => {
+  requestsInFriends, requestsInFriendsIsFetching, addInFriends })  => {
 
   const classes = useStyles();
   const  [tab, setTab] = useState(0);
@@ -89,6 +89,7 @@ const Friends = ({ friends, friendsIsFetching, getFriends, getRequestsInFriends,
             getRequestsInFriends={getRequestsInFriends}
             requestsInFriends={requestsInFriends}
             requestsInFriendsIsFetching={requestsInFriendsIsFetching}
+            addInFriends={addInFriends}
           />
         </TabPanel>
       </Container>
@@ -107,6 +108,7 @@ export default compose(
   withAuthRedirect,
   connect(mapStateToProps, {
       getFriends,
-      getRequestsInFriends
+      getRequestsInFriends,
+      addInFriends
   })
 )(Friends);

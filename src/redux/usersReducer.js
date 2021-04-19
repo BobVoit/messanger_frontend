@@ -13,6 +13,7 @@ const TOGGLE_CURRENT_PROFILE = 'TOGGLE_CURRENT_PROFILE';
 const REMOVE_USER = 'REMOVE_USER';
 const SET_REQUESTS_IN_FRIENDS = 'SET_REQUESTS_IN_FRIENDS';
 const SET_REQUESTS_IN_FRIENDS_IS_FETCHING = 'SET_REQUESTS_IN_FRIENDS_IS_FETCHING';
+const SET_REQUESTS_IN_FRIENDS_SUCCESS = 'SET_REQUESTS_IN_FRIENDS_SUCCESS';
 
 
 // initialState
@@ -95,7 +96,7 @@ const usersReducer = (state = initialState, action) => {
         case SET_REQUESTS_IN_FRIENDS: {
             return {
                 ...state,
-                requestsInFriends: action.requestsInFriends
+                requestsInFriends: action.requestsInFriends.map(element => ({ ...element, isAdd: false }))
             }
         }
         case SET_REQUESTS_IN_FRIENDS_IS_FETCHING: {
@@ -104,10 +105,20 @@ const usersReducer = (state = initialState, action) => {
                 requestsInFriendsIsFetching: action.value
             }
         }
+        case SET_REQUESTS_IN_FRIENDS_SUCCESS: {
+            console.log(action);
+            return {
+                ...state,
+                requestsInFriendsIsFetching: state.requestsInFriends.map(element => 
+                    element.id === action.userId ? { ...element, isAdd: true } : { ...element}),
+            }
+        }
         default:
             return state;
     }
 }
+
+// action creators
 
 export const setAllActiveUsers = (users) => ({
     type: SET_ALL_ACTIVE_USERS,
@@ -169,6 +180,14 @@ export const setRequestsInFriendsIsFetching = (value) => ({
     value
 })
 
+export const setRequestInFriendsSuccess = (userId) => ({
+    type: SET_REQUESTS_IN_FRIENDS_SUCCESS,
+    userId
+})
+
+// thunks
+
+// получить пользователей в количестве count от start пользователя
 export const getUsers = (userId, count, start) => async (dispatch) => {
     const response = await userAPI.getSomeUsers(userId, count, start);
     dispatch(toggleUsersIsFetching(true));
@@ -179,6 +198,7 @@ export const getUsers = (userId, count, start) => async (dispatch) => {
     } 
 }
 
+// получить друзей
 export const getFriends = () => async (dispatch) => {
     const token = localStorage.getItem('token');
     dispatch(toggleFriendsIsFetching(true));
@@ -190,6 +210,7 @@ export const getFriends = () => async (dispatch) => {
     }
 }
 
+// получить профиль пользователя
 export const getProfile = (userId) => async (dispatch) => {
     const response = await userAPI.getUserProfile(userId);
     const { result, data } = response.data;
@@ -198,6 +219,7 @@ export const getProfile = (userId) => async (dispatch) => {
     }
 }
 
+// получить запросы в друзья
 export const requestInFriends = (fromId, toId) => async (dispatch) => {
     const response = await friendsAPI.requestInFriends(fromId, toId);
     const { result, data } = response.data;
@@ -206,6 +228,7 @@ export const requestInFriends = (fromId, toId) => async (dispatch) => {
     }
 }
 
+// удалить запрос в друзья
 export const deleteRequestInFriends = (id) => async (dispatch) => {
     const response = await friendsAPI.deleteRequestInFriends(id);
     const { result, data } = response.data;
@@ -213,6 +236,7 @@ export const deleteRequestInFriends = (id) => async (dispatch) => {
     }
 }
 
+// получить запросы в друзья
 export const getRequestsInFriends = (userId) => async (dispatch) => {
     dispatch(setRequestsInFriendsIsFetching(true));
     const response = await friendsAPI.getRequestsInFriends(userId);
@@ -223,12 +247,13 @@ export const getRequestsInFriends = (userId) => async (dispatch) => {
     }
 }
 
+// добавить в друзья
 export const addInFriends = (userId) => async (dispatch) => {
     const selfId = localStorage.getItem('userId');
-    const response = await friendsAPI.addInFriends(userId, selfId);
+    const response = await friendsAPI.addInFriends(selfId, userId);
     const { result, data } = response.data;
-    if (data.result === 'ok' && data) {
-        // написать локальную подписку для отображения 
+    if (result === 'ok' && data) {
+        dispatch(setRequestInFriendsSuccess(userId));
     }
 }
 
