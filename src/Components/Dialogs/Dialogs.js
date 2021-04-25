@@ -36,6 +36,11 @@ class Dialogs extends Component {
         }
     }
 
+    componentDidMount() {
+        const ws = this.context;
+        ws.getAllRooms();
+    }
+
 
     selectCompanion = (companion) => {
         const ws = this.context;
@@ -45,7 +50,7 @@ class Dialogs extends Component {
     }
 
     render() {
-        const { classes, activeUsers, messages, selfId, currentCompanion } = this.props;
+        const { classes, activeUsers, messages, selfId, currentCompanion,rooms } = this.props;
         return (
             <Fade in={true}>
                 <Container fixed className={classes.root}>
@@ -58,6 +63,7 @@ class Dialogs extends Component {
                         <Grid item sm={4} md={4}>
                             <Conversations
                                 activeUsers={activeUsers}
+                                rooms={rooms}
                                 selectCompanion={this.selectCompanion}
                                 selectedCompanionId={this.state.selectedCompanionId}
                             />
@@ -83,14 +89,16 @@ Dialogs.propTypes = {
     currentCompanion: companionPT,
     setCompanion: PropTypes.func,
     messages: messagesPT,
-    selfId: PropTypes.number
+    selfId: PropTypes.number,
+    rooms: PropTypes.array
 }
 
 const mapStateToProps = (state) => ({
     activeUsers: state.users.activeUsers,
     currentCompanion: state.chat.currentCompanion,
     messages: state.chat.messages,
-    selfId: state.auth.id
+    selfId: state.auth.id, 
+    rooms: state.chat.rooms,
 })
 
 export default compose(

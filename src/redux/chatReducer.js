@@ -5,12 +5,15 @@ const SET_ALL_MESSAGES = 'SET_ALL_MESSAGES';
 const ADD_MESSAGE = 'ADD_MESSAGE';
 const DELETE_MESSAGE = 'DELETE_MESSAGE';
 const SET_COMPANION = 'SET_COMPANION';
+const SET_ALL_ROOMS = 'SET_ALL_ROOMS';
+const SET_NEW_ROOM = 'SET_NEW_ROOM';
 
 
 // initialState
 let initialState = {
     messages: [],
     currentCompanion: null,
+    rooms: [],
 }
 
 
@@ -42,6 +45,18 @@ const chatReducer = (state = initialState, action) => {
                 currentCompanion: action.companion
             }
         }
+        case SET_ALL_ROOMS: {
+            return {
+                ...state,
+                rooms: action.rooms
+            }
+        }
+        case SET_NEW_ROOM: {
+            return {
+                ...state,
+                rooms: [...state.rooms, action.room]
+            }
+        }
         default:
             return state;
     }
@@ -63,6 +78,16 @@ export const setCompanion = (companion) => ({
 export const addMessage = (message) => ({
     type: ADD_MESSAGE,
     message
+})
+
+export const setAllRooms = (rooms) => ({
+    type: SET_ALL_ROOMS,
+    rooms
+})
+
+export const setNewRoom = (room) => ({
+    type: SET_NEW_ROOM,
+    room
 })
 
 

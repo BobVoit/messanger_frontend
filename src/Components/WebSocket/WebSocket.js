@@ -4,8 +4,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import socket from '../../service/socket';
-import { setAllActiveUsers, setNewActiveUser, removeDisactiveUser } from '../../redux/usersReducer';
-import { setAllMessages, addMessage } from '../../redux/chatReducer';
+import { 
+    setAllActiveUsers, 
+    setNewActiveUser,
+    removeDisactiveUser
+} from '../../redux/usersReducer';
+import { 
+    setAllMessages, 
+    addMessage,
+    setAllRooms,
+    setNewRoom
+} from '../../redux/chatReducer';
 
 const WebSocketContext = createContext(null);
 
@@ -16,12 +25,13 @@ class WebSocketProvider extends Component {
 
     constructor(props) {
         super(props);
-        this.SETTINGS = SETTINGS;
+        this.MESSAGES = SETTINGS.MESSAGES;
 
         this.socket = socket;
 
         const { GET_ALL_ACTIVE_USERS, USER_CONNECT, USER_DISCONNECT,
-             GET_ALL_MESSAGES, PRIVATE_MESSAGE } = this.SETTINGS.MESSAGES;
+            GET_ALL_MESSAGES, PRIVATE_MESSAGE, CREATE_ROOM, GET_ROOMS,
+            NEW_ROOM, } = this.MESSAGES;
 
         this.socket.on('connect', () => {
             console.log('connect', this.socket.id);
@@ -39,16 +49,19 @@ class WebSocketProvider extends Component {
         this.socket.on(GET_ALL_ACTIVE_USERS, data => this.props.setAllActiveUsers(data));
         this.socket.on(USER_CONNECT, data => this.props.setNewActiveUser(data));
         this.socket.on(USER_DISCONNECT, data => this.props.removeDisactiveUser(data));
-
         this.socket.on(GET_ALL_MESSAGES, data => this.props.setAllMessages(data));
-
         this.socket.on(PRIVATE_MESSAGE, data => this.props.addMessage(data));
+        this.socket.on(GET_ROOMS, data => this.props.setAllRooms(data));
+        this.socket.on(NEW_ROOM, data => this.props.setNewRoom(data));
+        // this.socket.on(CREATE_ROOM, data => this.props.)
 
         this.ws = {
             socket: this.socket,
             sendMessage: this.sendMessage,
             setConnection: this.setConnection,
             getAllMessages: this.getAllMessages,
+            createRoom: this.createRoom,
+            getAllRooms: this.getAllRooms,
         }
     }
 
@@ -64,15 +77,23 @@ class WebSocketProvider extends Component {
         const dt = new Date();
         const date = dt.toLocaleDateString();
         const time = dt.toLocaleTimeString();
-        this.socket.emit(this.SETTINGS.MESSAGES.PRIVATE_MESSAGE, { ...data, date, time });
+        this.socket.emit(this.MESSAGES.PRIVATE_MESSAGE, { ...data, date, time });
     }
 
     setConnection = () => {
-        this.socket.emit(this.SETTINGS.MESSAGES.SET_CONNECT, { token: this.props.token });
+        this.socket.emit(this.MESSAGES.SET_CONNECT, { token: this.props.token });
     }
 
     getAllMessages = (companionId) => {
-        this.socket.emit(this.SETTINGS.MESSAGES.GET_ALL_MESSAGES, { from: this.props.id, to: companionId });
+        this.socket.emit(this.MESSAGES.GET_ALL_MESSAGES, { from: this.props.id, to: companionId });
+    }
+
+    createRoom = (title) => {
+        this.socket.emit(this.MESSAGES.CREATE_ROOM, { title: title })
+    }
+
+    getAllRooms = () => {
+        this.socket.emit(this.MESSAGES.GET_ROOMS, true);
     }
 
     render() {
@@ -92,6 +113,8 @@ WebSocketProvider.propTypes = {
     setNewActiveUser: PropTypes.func,
     removeDisactiveUser: PropTypes.func,
     addMessage: PropTypes.func,
+    setAllRooms: PropTypes.func,
+    setNewRoom: PropTypes.func,
 }
 
 const mapStateToProps = (state) => ({
@@ -105,5 +128,7 @@ export default connect(mapStateToProps, {
     setNewActiveUser,
     removeDisactiveUser,
     setAllMessages,
-    addMessage
+    addMessage,
+    setAllRooms,
+    setNewRoom
 })(WebSocketProvider);
