@@ -10,15 +10,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const RoomItem = ({ room }) => {
+const RoomItem = ({ room, isSelect, selectRoom }) => {
     const classes = useStyles();
+    const selectCurrentRoom = () => selectRoom(room);
+    console.log(isSelect);
     return (
         <ListItem
+            selected={isSelect}
             className={classes.root}
             button
+            onClick={selectCurrentRoom}
             component="li"
-            // onClick={} выбор комнаты написать нужно 
-            // selected={isSelect}
         >
             <ListItemText 
                 primary={room.title}

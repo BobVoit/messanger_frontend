@@ -70,7 +70,7 @@ export const setAllMessages = (messages) => ({
     messages
 })
 
-export const setCompanion = (companion) => ({
+export const setCompanion = (companion) => ({ // id, idSelect, avatar, title, countUsers
     type: SET_COMPANION,
     companion
 })

@@ -53,7 +53,12 @@ class WebSocketProvider extends Component {
         this.socket.on(PRIVATE_MESSAGE, data => this.props.addMessage(data));
         this.socket.on(GET_ROOMS, data => this.props.setAllRooms(data));
         this.socket.on(NEW_ROOM, data => this.props.setNewRoom(data));
-        // this.socket.on(CREATE_ROOM, data => this.props.)
+        this.socket.on(CREATE_ROOM, data => {
+            const { result, room } = data;
+            if (result) {
+                this.props.setNewRoom(room);
+            }
+        });
 
         this.ws = {
             socket: this.socket,
@@ -89,7 +94,7 @@ class WebSocketProvider extends Component {
     }
 
     createRoom = (title) => {
-        this.socket.emit(this.MESSAGES.CREATE_ROOM, { title: title })
+        this.socket.emit(this.MESSAGES.CREATE_ROOM, title )
     }
 
     getAllRooms = () => {

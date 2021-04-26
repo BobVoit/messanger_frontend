@@ -6,7 +6,7 @@ import { Paper, Avatar, Typography, Tooltip, IconButton, Fade } from '@material-
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 
-import SuccerssSnackbar from '../Snackbars/SuccerssSnackbar';
+import Snackbar from '../Snackbars/Snackbar';
 import UserAvatar from '../UserAvatar';
 
 const useStyles = makeStyles((theme) => ({
@@ -103,7 +103,7 @@ const UserCard = ({ user, isAction, actionText, snackbarText, actionButtonHandle
                 </div>}
                 
                 {/* Всплывающее окно об успешности операции */}
-                <SuccerssSnackbar 
+                <Snackbar 
                     open={openSnackBar}
                     handleClose={handleSnackBarClose}
                     message={snackbarText}

@@ -41,16 +41,38 @@ class Dialogs extends Component {
         ws.getAllRooms();
     }
 
+    removeSelectedCompanion = () => this.setState({ selectedCompanionId: -1 });
 
     selectCompanion = (companion) => {
         const ws = this.context;
-        this.props.setCompanion(companion);
+        this.props.setCompanion({
+            id: companion.id,
+            title: companion.nickname,
+            count: null,
+            avatar: companion.avatar,
+            idSelect: companion.idSelect,
+            socketId: companion.socketId,
+            type: 'user'
+        });
         ws.getAllMessages(companion.id);
-        this.setState({ selectedCompanionId: companion.id });
+        this.setState({ selectedCompanionId: companion.idSelect });
     }
 
+    selectRoom = (room) => {
+        console.log(room);
+        this.props.setCompanion({
+            id: room.id,
+            title: room.title,
+            count: room.count,
+            avatar: null,
+            idSelect: room.idSelect,
+            type: 'room'
+        });
+        this.setState({ selectedCompanionId: room.idSelect });
+    } 
+
     render() {
-        const { classes, activeUsers, messages, selfId, currentCompanion,rooms } = this.props;
+        const { classes, activeUsers, messages, selfId, currentCompanion, rooms } = this.props;
         return (
             <Fade in={true}>
                 <Container fixed className={classes.root}>
@@ -65,6 +87,7 @@ class Dialogs extends Component {
                                 activeUsers={activeUsers}
                                 rooms={rooms}
                                 selectCompanion={this.selectCompanion}
+                                selectRoom={this.selectRoom}
                                 selectedCompanionId={this.state.selectedCompanionId}
                             />
                         </Grid>
@@ -75,6 +98,7 @@ class Dialogs extends Component {
                                 currentCompanion={currentCompanion}
                                 selectedCompanionId={this.state.selectedCompanionId}
                                 selfId={selfId}
+                                removeSelectedCompanion={this.removeSelectedCompanion}
                             />
                         </Grid>
                     </Grid>

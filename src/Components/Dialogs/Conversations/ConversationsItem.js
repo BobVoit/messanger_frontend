@@ -18,7 +18,6 @@ const ConversationsItem = ({ user, selectCompanion, isSelect }) => {
     const selectCurrentUser = () => {
       selectCompanion(user);
     }
-
     return (
         <ListItem
             className={classes.root}

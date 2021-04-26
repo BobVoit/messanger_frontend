@@ -42,13 +42,36 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Conversations = ({ activeUsers, selectCompanion, selectedCompanionId, rooms }) => {
+const Conversations = ({ activeUsers, selectCompanion, 
+    selectedCompanionId, rooms, selectRoom }) => {
     const classes = useStyles();
     const [openCreateRoom, setOpenCreateRoom] = useState(false);
+
 
     const openDialogCreateRoom = () => setOpenCreateRoom(true);
     const closeDialogCreateRoom = () => setOpenCreateRoom(false);
 
+    const unionAndRenderConversationsAndRooms = () => {
+        return rooms.concat(activeUsers).map((element, index) => ({
+            ...element,
+            idSelect: index
+        })).map(element => element.login ? <ConversationsItem 
+            isSelect={selectedCompanionId === element.idSelect}
+            key={element.id} 
+            user={element} 
+            selectCompanion={selectCompanion}
+        /> :  <RoomItem 
+            isSelect={selectedCompanionId === element.idSelect}
+            key={element.id}
+            room={element}
+            selectRoom={selectRoom}
+        />);
+    }
+
+    console.log(rooms.concat(activeUsers).map((element, index) => ({
+        ...element,
+        idSelect: index
+    })));
     return (
         <div className={classes.root}>
             <div className={classes.header}>
@@ -63,7 +86,8 @@ const Conversations = ({ activeUsers, selectCompanion, selectedCompanionId, room
                 dense
                 className={classes.list}
             >
-                {rooms.map(room => <RoomItem 
+                {unionAndRenderConversationsAndRooms()}
+                {/* {rooms.map(room => <RoomItem 
                     key={room.id}
                     room={room}
                     // selectCompanion={selectCompanion}
@@ -73,7 +97,7 @@ const Conversations = ({ activeUsers, selectCompanion, selectedCompanionId, room
                     key={user.id} 
                     user={user} 
                     selectCompanion={selectCompanion}
-                />)}
+                />)} */}
             </List>
             <Button
                 fullWidth

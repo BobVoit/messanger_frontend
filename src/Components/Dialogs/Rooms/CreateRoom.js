@@ -10,20 +10,23 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { WebSocketContext } from '../../WebSocket/WebSocket';
-
-const useStyles = makeStyles((theme) => ({
-
-}))
+import Snackbar from '../../common/Snackbars/Snackbar'; 
 
 const CreateRoom = ({ open, handleClose }) => {
     const [roomName, setRoomName] = useState("");
+    const [openSnackbar, setOpenSnackbar] = useState(false);
     const ws = useContext(WebSocketContext);
 
     const onChangeRoomName = (e) => setRoomName(e.target.value);
+    const handleOpenSnackbar = () => setOpenSnackbar(true);
+    const handleCloseSnackbar = () => setOpenSnackbar(false);
 
     const createNewRoom = () => {
         if (roomName) {
             ws.createRoom(roomName);
+            handleClose();
+        } else {
+            handleOpenSnackbar();
         }
     }
 
@@ -50,14 +53,19 @@ const CreateRoom = ({ open, handleClose }) => {
             </DialogContent>
             <DialogActions>
                 <Button 
-                    onClick={handleClose} 
+                    onClick={createNewRoom} 
                     color="primary"
                     variant="outlined"
                 >
                     Создать комнату
                 </Button>
             </DialogActions>
-
+            <Snackbar 
+                open={openSnackbar}
+                handleClose={handleCloseSnackbar}
+                message="Название комнаты не может быть пустой строкой"
+                severity="warning"
+            />
         </Dialog>
     )
 }

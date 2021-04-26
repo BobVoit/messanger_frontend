@@ -17,17 +17,20 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 
-const DialogBox = ({ messages, currentCompanion, selectedCompanionId, selfId }) => {
+const DialogBox = ({ messages, currentCompanion, selectedCompanionId,
+     selfId, removeSelectedCompanion }) => {
     const classes = useStyles();
 
     if (selectedCompanionId === -1) {
         return <div className={classes.root}></div>
     }
 
+    console.log(currentCompanion);
     return (
         <div className={classes.root}>
             <DialogHeader 
                 currentCompanion={currentCompanion}
+                removeSelectedCompanion={removeSelectedCompanion}
             />
             <ListMessages 
                 messages={messages}

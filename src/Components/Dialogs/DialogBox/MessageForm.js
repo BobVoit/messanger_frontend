@@ -46,7 +46,7 @@ const validationSchema = yup.object({
 const MessageForm = ({ currentCompanion, selfId }) => {
     const classes = useStyles();
     const ws = useContext(WebSocketContext);
-
+    console.log(currentCompanion);
     const formik = useFormik({
         initialValues: {
             message: ''
@@ -54,12 +54,14 @@ const MessageForm = ({ currentCompanion, selfId }) => {
         validationSchema: validationSchema,
         onSubmit: (values) => {
             const { message } = values;
-            ws.sendMessage({ 
-                text: message,
-                from: selfId,
-                to: currentCompanion.id,
-                socketIdTo: currentCompanion.socketId
-            })
+            if (currentCompanion.type == 'user') {
+                ws.sendMessage({ 
+                    text: message,
+                    from: selfId,
+                    to: currentCompanion.id,
+                    socketIdTo: currentCompanion.socketId
+                })
+            }
             formik.resetForm({
                 values: {
                     message: ''

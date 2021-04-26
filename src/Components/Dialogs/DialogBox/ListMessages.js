@@ -28,7 +28,7 @@ const ListMessages = ({ messages, selfId, currentCompanion }) => {
                     key={message.id}
                     isSelf={selfId === message.fromId}
                     text={message.text}
-                    whoSend={selfId === message.fromId ? "Вы" : currentCompanion.nickname}
+                    whoSend={selfId === message.fromId ? "Вы" : currentCompanion.title}
                 />)}
             </div>
         </div>
